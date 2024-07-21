@@ -3,4 +3,4 @@ Roguelike game based off of the CC3k+ documentation
 
 # Architecture
 We decided to follow the ECS architecture for a higher level of modifiability and flexibility. 
-![cc3k+](https://github.com/user-attachments/assets/8722d36c-8301-4615-9a38-a45b8bf56180)
+![cc3k+-Page-2 drawio](https://github.com/user-attachments/assets/4d6577eb-be3f-4a47-af30-14be10ff3344)

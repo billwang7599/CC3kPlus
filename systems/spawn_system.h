@@ -59,6 +59,6 @@ public:
 
     void spawnDragonAndHoard(EntityManager &entityManager, int chamberX, int chamberY)
     {
-        // Get positions for hoard and dragon and spawn them together
+        // Get positions for hoard and dragon and spawn them
     }
 };

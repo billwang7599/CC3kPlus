@@ -30,14 +30,14 @@ public:
     {
         for (auto entity : entities)
         {
-            std::shared_ptr<PositionComponent> position_component = entity->getComponent("positionComponent");
+            auto position_component = entity->getComponent<PositionComponent>();
 
             if (!position_component)
             {
                 continue;
             }
 
-            if (position_component->x == row && position_component->y == col)
+            if (position_component->row == row && position_component->col == col)
             {
                 return entity;
             }

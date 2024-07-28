@@ -1,6 +1,7 @@
 #include <vector>
 #include <memory>
 #include <utility>
+#include <algorithm>
 #include "entity.h"
 #include "component.h"
 #include "position_component.h"

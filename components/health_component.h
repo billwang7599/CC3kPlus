@@ -1,4 +1,4 @@
-class Component;
+#include "component.h"
 
 class HealthComponent : public Component
 {

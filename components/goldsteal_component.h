@@ -1,8 +1,8 @@
 #include "component.h"
 
-class GoldStealComponent {
-    public:
+class GoldStealComponent : public Component
+{
+public:
     int amountStolen;
-    GoldStealComponent(int amount) : amountStolen{amount} {};
-
+    GoldStealComponent(int amount);
 };

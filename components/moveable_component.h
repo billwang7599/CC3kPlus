@@ -4,5 +4,5 @@ class MoveableComponent : public Component
 {
 public:
     bool moveable;
-    MoveableComponent(bool moveable) : moveable{moveable} {};
+    MoveableComponent(bool moveable);
 };

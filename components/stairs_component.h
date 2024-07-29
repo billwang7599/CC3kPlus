@@ -4,5 +4,5 @@ class StairsComponent : public Component
 {
 public:
     bool visible;
-    StairsComponent(bool visible) : visible{visible} {};
+    StairsComponent(bool visible);
 };

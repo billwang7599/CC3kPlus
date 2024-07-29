@@ -4,6 +4,5 @@ class HostileComponent : public Component
 {
 public:
     bool hostile;
-    HostileComponent(bool hostile) : hostile{hostile} {};
+    HostileComponent(bool hostile);
 };
-

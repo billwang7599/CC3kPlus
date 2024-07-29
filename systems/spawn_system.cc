@@ -12,7 +12,6 @@
 #include "hostile_component.h"
 #include "moveable_component.h"
 #include "gold_component.h"
-#include "enemy_has_compass_component.h"
 #include "potion_type_component.h"
 #include "treasure_component.h"
 #include "can_pickup_component.h"
@@ -281,7 +280,6 @@ void SpawnSystem::spawnEnemy(EntityManager &entityManager, int x, int y, const s
         enemy->addComponent(std::make_shared<GoldComponent>(1));
     }
     // Add more enemy types as needed
-    enemy->addComponent(std::make_shared<EnemyHasCompassComponent>(false));
     enemy->addComponent(std::make_shared<MoveableComponent>(true));
     enemy->addComponent(std::make_shared<EnemyTypeComponent>(enemyType));
     enemy->addComponent(std::make_shared<PositionComponent>(x, y));

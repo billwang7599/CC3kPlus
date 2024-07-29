@@ -4,5 +4,5 @@ class PositionComponent : public Component
 {
 public:
     int row, col;
-    PositionComponent(int row, int col) : row{row}, col{col} {};
+    PositionComponent(int row, int col);
 };

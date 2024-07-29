@@ -1,0 +1,1 @@
+#include "compass_component.h"

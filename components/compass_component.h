@@ -2,6 +2,4 @@
 
 class CompassComponent : public Component
 {
-public:
-    CompassComponent() {}
 };

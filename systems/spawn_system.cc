@@ -15,6 +15,13 @@
 #include "moveable_component.h"
 #include "gold_dropped_component.h"
 #include "enemy_has_compass_component.h"
+#include "potion_type_component.h"
+#include "treasure_component.h"
+#include "can_pickup_component.h"
+#include "item_type_component.h"
+#include "compass_component.h"
+#include "barrier_suit_component.h"
+#include "stairs_component.h"
 
 void SpawnSystem::spawnPlayer(EntityManager &entityManager, int x, int y, const std::string &race)
 {
@@ -124,18 +131,58 @@ void SpawnSystem::spawnEnemy(EntityManager &entityManager, int x, int y, const s
     enemy->addComponent(std::make_shared<PositionComponent>(x, y));
 }
 
+void SpawnSystem::spawnPotion(EntityManager &entityManager, int x, int y, const std::string &potionType)
+{
+
+    auto potion = entityManager.createEntity();
+    potion->addComponent(std::make_shared<ItemTypeComponent>("potion"));
+    potion->addComponent(std::make_shared<PositionComponent>(x, y));
+    potion->addComponent(std::make_shared<DisplayComponent>('P'));
+    potion->addComponent(std::make_shared<PotionTypeComponent>(potionType));
+    potion->addComponent(std::make_shared<CanPickupComponent>(true));
+}
+
+void SpawnSystem::spawnTreasure(EntityManager &entityManager, int x, int y, const int &value)
+{
+    auto treasure = entityManager.createEntity();
+    treasure->addComponent(std::make_shared<ItemTypeComponent>("treasure"));
+    treasure->addComponent(std::make_shared<PositionComponent>(x, y));
+    treasure->addComponent(std::make_shared<DisplayComponent>('G'));
+    treasure->addComponent(std::make_shared<TreasureComponent>(value));
+
+    if (value == 6) // Dragon hoard
+    {
+        treasure->addComponent(std::make_shared<CanPickupComponent>(false));
+    }
+    else
+    {
+        treasure->addComponent(std::make_shared<CanPickupComponent>(true));
+    }
+}
+
 void SpawnSystem::spawnItem(EntityManager &entityManager, int x, int y, const std::string &itemType)
 {
     auto item = entityManager.createEntity();
     item->addComponent(std::make_shared<PositionComponent>(x, y));
-    if (itemType == "Gold")
+    item->addComponent(std::make_shared<ItemTypeComponent>(itemType));
+    if (itemType == "compass")
     {
-        // item->addComponent(std::make_shared<ItemTypeComponent>("Gold", 1));
-        // item->addComponent(std::make_shared<GoldComponent>(1));
+        item->addComponent(std::make_shared<DisplayComponent>('C'));
+        item->addComponent(std::make_shared<CanPickupComponent>(true));
+        item->addComponent(std::make_shared<CompassComponent>());
     }
-    else if (itemType == "Potion")
+    else if (itemType == "barrier_suit")
     {
-        // item->addComponent(std::make_shared<ItemTypeComponent>("Potion", 1));
+        item->addComponent(std::make_shared<DisplayComponent>('B'));
+        item->addComponent(std::make_shared<CanPickupComponent>(false));
+        item->addComponent(std::make_shared<BarrierSuitComponent>());
     }
+    else if (itemType == "stairs")
+    {
+        item->addComponent(std::make_shared<DisplayComponent>('\\'));
+        item->addComponent(std::make_shared<CanPickupComponent>(false));
+        item->addComponent(std::make_shared<StairsComponent>(false));
+    }
+
     // Add more item types as needed
 }

@@ -18,7 +18,7 @@ void DisplaySystem::update(EntityManager &entityManager)
             }
             else
             {
-                std::cout << " ";
+                std::cout << BOARD.at(row).at(col);
             }
         }
         std::cout << std::endl;

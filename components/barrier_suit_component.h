@@ -2,6 +2,4 @@
 
 class BarrierSuitComponent : public Component
 {
-public:
-    BarrierSuitComponent() {}
 };

@@ -6,3 +6,4 @@ public:
     bool hostile;
     HostileComponent(bool hostile) : hostile{hostile} {};
 };
+

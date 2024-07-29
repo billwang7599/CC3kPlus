@@ -1,3 +1,6 @@
+#ifndef ENTITY_H
+#define ENTITY_H
+
 #include <iostream>
 #include <string>
 #include <unordered_map>
@@ -23,3 +26,5 @@ public:
     template <typename T>
     void removeComponent();
 };
+
+#endif

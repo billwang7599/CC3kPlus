@@ -1,3 +1,6 @@
+#include <cmath>
+#include <random>
+#include <algorithm>
 #include "combat_system.h"
 #include "entity.h"
 #include "entity_manager.h"
@@ -9,10 +12,71 @@
 #include "goldsteal_component.h"
 #include "gold_component.h"
 #include "barrier_suit_component.h"
-#include <cmath>
-#include <algorithm>
+#include "position_component.h"
 
 using namespace std;
+
+void CombatSystem::battle(EntityManager& entities, shared_ptr<Entity> player, const string& direction) {
+    const int pX = player->getComponent<PositionComponent>()->col;
+    const int pY = player->getComponent<PositionComponent>()->row;
+    shared_ptr<Entity> enemy;
+
+    if (direction == "no") {
+        enemy = entities.getEntity(pX, pY + 1);
+
+    } else if (direction == "ea") {
+        enemy = entities.getEntity(pX + 1, pY);
+
+    }  else if (direction == "so") {
+        enemy = entities.getEntity(pX, pY - 1);
+
+    }  else if (direction == "we") {
+        enemy = entities.getEntity(pX - 1, pY);
+
+    }  else if (direction == "ne") {
+        enemy = entities.getEntity(pX + 1, pY + 1);
+
+    }  else if (direction == "nw") {
+        enemy = entities.getEntity(pX - 1, pY + 1);
+
+    }  else if (direction == "se") {
+        enemy = entities.getEntity(pX + 1, pY - 1);
+
+    }  else if (direction == "sw") {
+        enemy = entities.getEntity(pX - 1, pY - 1);
+
+    } else {
+        throw "Not a valid direction!";
+    }
+
+    if (!enemy) {
+        throw "No enemy there!";
+    }
+
+    cout << "Player is attacking the enemy" << '\n';
+    attack(*player, *enemy);
+    if (checkDeath(*enemy)) {
+        entities.removeEntity(enemy);
+    };
+
+    if (enemy) {
+        random_device rd;
+        mt19937 gen(rd());
+        uniform_int_distribution<> distrib(0, 1);
+        int result = distrib(gen);
+        if (result == 0) {
+            cout << "Enemy is attacking the player" << '\n';
+            attack(*enemy, *player);
+        }
+    }
+
+    // check game over?
+}
+
+bool CombatSystem::checkDeath(Entity& e) {
+    auto health = e.getComponent<HealthComponent>();
+    return health->current_health <= 0;
+}
 
 void CombatSystem::attack(Entity& attacker, Entity& defender) {
     // assumes we know who is attacking & defending
@@ -38,10 +102,9 @@ void CombatSystem::attack(Entity& attacker, Entity& defender) {
     }
 
     health->current_health -= damage;
+    cout << damage << " damage done!" << '\n';
 
-    // check for death ?
-
-    if (health->current_health <= 0) {
+    if (checkDeath(defender)) {
         if (defender.getComponent<GoldComponent>()) {
             return;
         }

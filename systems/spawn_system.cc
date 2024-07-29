@@ -2,18 +2,16 @@
 #include "entity_manager.h"
 #include "component.h"
 #include "entity.h"
-
 #include "health_component.h"
 #include "attack_component.h"
 #include "defense_component.h"
 #include "position_component.h"
 #include "player_race_component.h"
-#include "player_gold_component.h"
 #include "display_component.h"
 #include "enemy_type_component.h"
 #include "hostile_component.h"
 #include "moveable_component.h"
-#include "gold_dropped_component.h"
+#include "gold_component.h"
 #include "enemy_has_compass_component.h"
 
 void SpawnSystem::spawnPlayer(EntityManager &entityManager, int x, int y, const std::string &race)
@@ -48,11 +46,12 @@ void SpawnSystem::spawnPlayer(EntityManager &entityManager, int x, int y, const 
     player->addComponent(std::make_shared<DisplayComponent>('@'));
     player->addComponent(std::make_shared<PositionComponent>(x, y));
     player->addComponent(std::make_shared<PlayerRaceComponent>(race));
-    player->addComponent(std::make_shared<PlayerGoldComponent>(0));
+    player->addComponent(std::make_shared<GoldComponent>(0));
 }
 
 void SpawnSystem::spawnEnemy(EntityManager &entityManager, int x, int y, const std::string &enemyType)
 {
+    // Refactor to move all common components out
     auto enemy = entityManager.createEntity();
     if (enemyType == "vampire")
     {
@@ -61,7 +60,7 @@ void SpawnSystem::spawnEnemy(EntityManager &entityManager, int x, int y, const s
         enemy->addComponent(std::make_shared<AttackComponent>(25));
         enemy->addComponent(std::make_shared<DefenseComponent>(25));
         enemy->addComponent(std::make_shared<HostileComponent>(true));
-        enemy->addComponent(std::make_shared<GoldDroppedComponent>(1));
+        enemy->addComponent(std::make_shared<GoldComponent>(1));
     }
     else if (enemyType == "werewolf")
     {
@@ -69,7 +68,7 @@ void SpawnSystem::spawnEnemy(EntityManager &entityManager, int x, int y, const s
         enemy->addComponent(std::make_shared<HealthComponent>(120, 120));
         enemy->addComponent(std::make_shared<AttackComponent>(30));
         enemy->addComponent(std::make_shared<DefenseComponent>(5));
-        enemy->addComponent(std::make_shared<GoldDroppedComponent>(1));
+        enemy->addComponent(std::make_shared<GoldComponent>(1));
         enemy->addComponent(std::make_shared<HostileComponent>(true));
     }
     else if (enemyType == "troll")
@@ -79,7 +78,7 @@ void SpawnSystem::spawnEnemy(EntityManager &entityManager, int x, int y, const s
         enemy->addComponent(std::make_shared<AttackComponent>(25));
         enemy->addComponent(std::make_shared<DefenseComponent>(15));
         enemy->addComponent(std::make_shared<HostileComponent>(true));
-        enemy->addComponent(std::make_shared<GoldDroppedComponent>(1));
+        enemy->addComponent(std::make_shared<GoldComponent>(1));
     }
     else if (enemyType == "goblin")
     {
@@ -88,7 +87,7 @@ void SpawnSystem::spawnEnemy(EntityManager &entityManager, int x, int y, const s
         enemy->addComponent(std::make_shared<AttackComponent>(5));
         enemy->addComponent(std::make_shared<DefenseComponent>(10));
         enemy->addComponent(std::make_shared<HostileComponent>(true));
-        enemy->addComponent(std::make_shared<GoldDroppedComponent>(1));
+        enemy->addComponent(std::make_shared<GoldComponent>(1));
     }
     else if (enemyType == "merchant")
     {
@@ -97,7 +96,7 @@ void SpawnSystem::spawnEnemy(EntityManager &entityManager, int x, int y, const s
         enemy->addComponent(std::make_shared<AttackComponent>(70));
         enemy->addComponent(std::make_shared<DefenseComponent>(5));
         enemy->addComponent(std::make_shared<HostileComponent>(false));
-        enemy->addComponent(std::make_shared<GoldDroppedComponent>(0));
+        enemy->addComponent(std::make_shared<GoldComponent>(0));
     }
     else if (enemyType == "dragon")
     {
@@ -106,7 +105,7 @@ void SpawnSystem::spawnEnemy(EntityManager &entityManager, int x, int y, const s
         enemy->addComponent(std::make_shared<AttackComponent>(20));
         enemy->addComponent(std::make_shared<DefenseComponent>(20));
         enemy->addComponent(std::make_shared<HostileComponent>(true));
-        enemy->addComponent(std::make_shared<GoldDroppedComponent>(0));
+        enemy->addComponent(std::make_shared<GoldComponent>(0));
     }
     else if (enemyType == "phoenix")
     {
@@ -115,7 +114,7 @@ void SpawnSystem::spawnEnemy(EntityManager &entityManager, int x, int y, const s
         enemy->addComponent(std::make_shared<AttackComponent>(35));
         enemy->addComponent(std::make_shared<DefenseComponent>(20));
         enemy->addComponent(std::make_shared<HostileComponent>(true));
-        enemy->addComponent(std::make_shared<GoldDroppedComponent>(1));
+        enemy->addComponent(std::make_shared<GoldComponent>(1));
     }
     // Add more enemy types as needed
     enemy->addComponent(std::make_shared<EnemyHasCompassComponent>(false));

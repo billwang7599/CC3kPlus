@@ -1,3 +1,6 @@
+#ifndef SPAWN_SYSTEM_H
+#define SPAWN_SYSTEM_H
+
 #include <memory>
 #include <vector>
 #include <string>
@@ -16,3 +19,5 @@ public:
     void spawnTreasure(EntityManager &entityManager, int x, int y, const int &value);
     void spawnItem(EntityManager &entityManager, int x, int y, const std::string &itemType);
 };
+
+#endif

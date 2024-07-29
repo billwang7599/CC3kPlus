@@ -1,3 +1,3 @@
 make
 
-out/cc3k
+bin/cc3k

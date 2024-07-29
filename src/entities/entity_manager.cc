@@ -1,7 +1,4 @@
-#include "entity_manager.h"
-#include "entity.h"
-#include "component.h"
-#include "position_component.h"
+#include "entities/entity_manager.h"
 
 std::shared_ptr<Entity> EntityManager::createEntity()
 {

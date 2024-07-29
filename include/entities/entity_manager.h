@@ -5,6 +5,8 @@
 #include <memory>
 #include <utility>
 #include <algorithm>
+#include "entities/entity.h"
+#include "components/position_component.h"
 
 class Entity;
 class Component;

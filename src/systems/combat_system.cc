@@ -1,49 +1,41 @@
 #include <cmath>
 #include <random>
 #include <algorithm>
+#include <iostream>
 #include "systems/combat_system.h"
 #include "entities/entity.h"
 #include "entities/entity_manager.h"
-#include "components/attack_component.h"
-#include "components/potion_effect_component.h"
-#include "components/health_component.h"
-#include "components/defense_component.h"
-#include "components/lifesteal_component.h"
-#include "components/goldsteal_component.h"
-#include "components/gold_component.h"
-#include "components/barrier_suit_component.h"
-#include "components/position_component.h"
 
 using namespace std;
 
 void CombatSystem::battle(EntityManager& entities, shared_ptr<Entity> player, const string& direction) {
-    const int pX = player->getComponent<PositionComponent>()->col;
-    const int pY = player->getComponent<PositionComponent>()->row;
+    const int pCol = player->getComponent<PositionComponent>()->col;
+    const int pRow = player->getComponent<PositionComponent>()->row;
     shared_ptr<Entity> enemy;
 
     if (direction == "no") {
-        enemy = entities.getEntity(pX, pY + 1);
+        enemy = entities.getEntity(pCol, pRow + 1);
 
     } else if (direction == "ea") {
-        enemy = entities.getEntity(pX + 1, pY);
+        enemy = entities.getEntity(pCol + 1, pRow);
 
     }  else if (direction == "so") {
-        enemy = entities.getEntity(pX, pY - 1);
+        enemy = entities.getEntity(pCol, pRow - 1);
 
     }  else if (direction == "we") {
-        enemy = entities.getEntity(pX - 1, pY);
+        enemy = entities.getEntity(pCol - 1, pRow);
 
     }  else if (direction == "ne") {
-        enemy = entities.getEntity(pX + 1, pY + 1);
+        enemy = entities.getEntity(pCol + 1, pRow + 1);
 
     }  else if (direction == "nw") {
-        enemy = entities.getEntity(pX - 1, pY + 1);
+        enemy = entities.getEntity(pCol - 1, pRow + 1);
 
     }  else if (direction == "se") {
-        enemy = entities.getEntity(pX + 1, pY - 1);
+        enemy = entities.getEntity(pCol + 1, pRow - 1);
 
     }  else if (direction == "sw") {
-        enemy = entities.getEntity(pX - 1, pY - 1);
+        enemy = entities.getEntity(pCol - 1, pRow - 1);
 
     } else {
         throw "Not a valid direction!";
@@ -80,6 +72,7 @@ bool CombatSystem::checkDeath(Entity& e) {
 
 void CombatSystem::attack(Entity& attacker, Entity& defender) {
     // assumes we know who is attacking & defending
+    // check if they have component before accessing
     const auto attack = attacker.getComponent<AttackComponent>();
     const auto potion_attack = attacker.getComponent<PotionEffectComponent>();
 

@@ -2,41 +2,40 @@
 CXX = g++
 
 # Directories
-SRC_DIR = src
 INCLUDE_DIR = include
-OBJ_DIR = build
-BIN_DIR = bin
-CONSTANTS_DIR = constants
+SRC_DIR = src
+BUILD_DIR = build
+
+# Output executable
+TARGET = bin/cc3k
 
 # Flags
-CXXFLAGS = -I$(INCLUDE_DIR) -I$(CONSTANTS_DIR) -Wall -std=c++11
+CXXFLAGS = -I$(INCLUDE_DIR) -std=c++14 -Wall
 
-# Sources and Objects
-SOURCES = $(wildcard $(SRC_DIR)/**/*.cc) $(wildcard $(SRC_DIR)/*.cc) $(CONSTANTS_DIR)/constants.cc
-OBJECTS = $(patsubst $(SRC_DIR)/%.cc, $(OBJ_DIR)/%.o, $(SOURCES)) $(OBJ_DIR)/constants.o
-
-# Target executable
-TARGET = $(BIN_DIR)/my_program
+# Find all source files recursively
+SRCS = $(shell find $(SRC_DIR) -name '*.cc')
+# Generate object files from source files
+OBJS = $(SRCS:$(SRC_DIR)/%.cc=$(BUILD_DIR)/%.o)
 
 # Default target
 all: $(TARGET)
 
-# Linking
-$(TARGET): $(OBJECTS)
-	@mkdir -p $(BIN_DIR)
-	$(CXX) $(OBJECTS) -o $(TARGET)
+# Link object files to create the executable
+$(TARGET): $(OBJS)
+	$(CXX) $(OBJS) -o $@
 
-# Compiling
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cc
-	@mkdir -p $(OBJ_DIR) $(dir $@)
+# Compile each source file to an object file
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cc | $(BUILD_DIR)
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(OBJ_DIR)/constants.o: $(CONSTANTS_DIR)/constants.cc
-	@mkdir -p $(OBJ_DIR)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+# Create the build directory
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
 
-# Clean up
+# Clean up build files
 clean:
-	rm -rf $(OBJ_DIR) $(BIN_DIR)
+	rm -rf $(BUILD_DIR) $(TARGET)
 
 .PHONY: all clean
+

@@ -11,20 +11,33 @@
 #include <cassert>
 
 class Component;
-
 class Entity
 {
     std::unordered_map<std::type_index, std::shared_ptr<Component>> components;
 
 public:
     template <typename T>
-    void addComponent(std::shared_ptr<T> component);
+    void addComponent(std::shared_ptr<T> component)
+    {
+        components[typeid(T)] = component;
+    }
 
     template <typename T>
-    std::shared_ptr<T> getComponent();
+    std::shared_ptr<T> getComponent()
+    {
+        auto it = components.find(typeid(T));
+        if (it != components.end())
+        {
+            return std::static_pointer_cast<T>(it->second);
+        }
+        return nullptr;
+    }
 
     template <typename T>
-    void removeComponent();
+    void removeComponent()
+    {
+        components.erase(typeid(T));
+    }
 };
 
 #endif

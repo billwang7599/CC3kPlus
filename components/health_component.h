@@ -6,7 +6,7 @@
 class HealthComponent : public Component
 {
 public:
-    HealthComponent(int max, int current);
+    HealthComponent(int max, int current) : max_health{max}, current_health{current} {}
     const int max_health;
     int current_health;
 };

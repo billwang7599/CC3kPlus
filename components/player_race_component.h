@@ -8,7 +8,7 @@ class PlayerRaceComponent : public Component
 {
 public:
     std::string race;
-    PlayerRaceComponent(std::string race);
+    PlayerRaceComponent(std::string race) : race{race} {}
 };
 
 #endif

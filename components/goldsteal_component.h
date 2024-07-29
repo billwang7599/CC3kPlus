@@ -7,7 +7,7 @@ class GoldStealComponent : public Component
 {
 public:
     int amountStolen;
-    GoldStealComponent(int amount);
+    GoldStealComponent(int amount) : amountStolen{amount} {}
 };
 
 #endif

@@ -7,7 +7,7 @@ class LifestealComponent : public Component
 {
 public:
     float percentageStolen;
-    LifestealComponent(float percent);
+    LifestealComponent(float percent) : percentageStolen{percent} {}
 };
 
 #endif

@@ -7,7 +7,7 @@ class HostileComponent : public Component
 {
 public:
     bool hostile;
-    HostileComponent(bool hostile);
+    HostileComponent(bool hostile) : hostile{hostile} {}
 };
 
 #endif

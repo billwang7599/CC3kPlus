@@ -4,15 +4,16 @@ CXX = g++
 # Directories
 SRC_DIR = src
 INCLUDE_DIR = include
-OBJ_DIR = obj
+OBJ_DIR = build
 BIN_DIR = bin
+CONSTANTS_DIR = constants
 
 # Flags
-CXXFLAGS = -I$(INCLUDE_DIR) -Wall -std=c++11
+CXXFLAGS = -I$(INCLUDE_DIR) -I$(CONSTANTS_DIR) -Wall -std=c++11
 
 # Sources and Objects
-SOURCES = $(wildcard $(SRC_DIR)/**/*.cpp) $(wildcard $(SRC_DIR)/*.cpp)
-OBJECTS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SOURCES))
+SOURCES = $(wildcard $(SRC_DIR)/**/*.cc) $(wildcard $(SRC_DIR)/*.cc) $(CONSTANTS_DIR)/constants.cc
+OBJECTS = $(patsubst $(SRC_DIR)/%.cc, $(OBJ_DIR)/%.o, $(SOURCES)) $(OBJ_DIR)/constants.o
 
 # Target executable
 TARGET = $(BIN_DIR)/my_program
@@ -26,53 +27,16 @@ $(TARGET): $(OBJECTS)
 	$(CXX) $(OBJECTS) -o $(TARGET)
 
 # Compiling
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cc
 	@mkdir -p $(OBJ_DIR) $(dir $@)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/constants.o: $(CONSTANTS_DIR)/constants.cc
+	@mkdir -p $(OBJ_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Clean up
 clean:
 	rm -rf $(OBJ_DIR) $(BIN_DIR)
-
-.PHONY: all clean
-# Compiler
-CXX = g++
-
-# Compiler flags
-CXXFLAGS = -std=c++17 -Wall -Wextra -Icomponents -Ientities -Isystems
-
-# Directories
-SRC_DIRS = components entities systems
-OUT_DIR = out
-
-# Find all .cc files in the source directories
-SRCS = $(shell find $(SRC_DIRS) -name '*.cc') main.cc
-
-# Object files
-OBJS = $(SRCS:.cc=.o)
-
-# Output executable
-TARGET = $(OUT_DIR)/main
-
-# Default target
-all: $(TARGET)
-
-
-#endif
-# Link object files to create the final executable
-$(TARGET): $(OBJS) | $(OUT_DIR)
-	$(CXX) $(CXXFLAGS) $(OBJS) -o $(TARGET)
-
-# Compile .cc files to .o files
-%.o: %.cc
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-# Create the output directory if it doesn't exist
-$(OUT_DIR):
-	mkdir -p $(OUT_DIR)
-
-# Clean up object files and the executable
-clean:
-	rm -rf $(OBJS) $(TARGET) $(OUT_DIR)
 
 .PHONY: all clean

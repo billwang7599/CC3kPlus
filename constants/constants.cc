@@ -1,6 +1,6 @@
 #include "constants.h"
 
-const std::vector<std::string> board = {
+const std::vector<std::string> BOARD = {
     "|-----------------------------------------------------------------------------|",
     "|                                                                             |",
     "| |--------------------------|        |-----------------------|               |",
@@ -28,7 +28,7 @@ const std::vector<std::string> board = {
     "|-----------------------------------------------------------------------------|",
 };
 
-const std::vector<std::vector<std::pair<int, int>>> room_coordinates = {
+const std::vector<std::vector<std::pair<int, int>>> ROOMS = {
     {
         // Room 0, top left room
         {3, 3},

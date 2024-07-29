@@ -1,3 +1,6 @@
+#ifndef ENTITY_MANAGER_H
+#define ENTITY_MANAGER_H
+
 #include <vector>
 #include <memory>
 #include <utility>
@@ -18,3 +21,6 @@ public:
     std::shared_ptr<Entity> getEntity(int row, int col);
     std::vector<std::shared_ptr<Entity>> getEntities();
 };
+
+
+#endif

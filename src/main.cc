@@ -12,6 +12,7 @@
 #include "systems/item_system.h"
 #include "constants/constants.h"
 
+
 int main(int argc, char *argv[])
 {
     int floor = 0;
@@ -65,8 +66,8 @@ int main(int argc, char *argv[])
         }
     }
 
-    std::string actionMessage = "";
     displaySystem.update(entityManagers[floor], player, floor, actionMessage);
+    actionMessage.clear();
 
     while (gameLoop)
     {

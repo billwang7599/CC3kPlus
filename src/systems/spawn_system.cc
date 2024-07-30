@@ -457,6 +457,7 @@ std::shared_ptr<Entity> SpawnSystem::spawnEnemy(EntityManager &entityManager, in
     {
         enemy->addComponent(std::make_shared<CompassComponent>());
     }
+    return enemy;
 }
 
 std::shared_ptr<Entity> SpawnSystem::spawnPotion(EntityManager &entityManager, int x, int y, const std::string &potionType)
@@ -510,6 +511,7 @@ std::shared_ptr<Entity> SpawnSystem::spawnItem(EntityManager &entityManager, int
         item->addComponent(std::make_shared<DisplayComponent>('\\'));
         item->addComponent(std::make_shared<StairsComponent>());
     }
+    return item;
 }
 
 void SpawnSystem::update(std::vector<EntityManager> &entityManagers, int &floor, std::shared_ptr<Entity> player)

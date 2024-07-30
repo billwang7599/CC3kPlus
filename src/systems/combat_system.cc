@@ -120,13 +120,13 @@ void CombatSystem::enemies_attack(EntityManager &entities, Entity &player)
         }
 
         // if dragon, and not next to guard, continue
-        // if (enemy->getComponent<EnemyTypeComponent>()->enemy_type == "dragon")
-        // {
-        //     std::shared_ptr<GuardingPositionComponent> pos = enemy->getComponent<GuardingPositionComponent>();
-        //     if (abs(pCol - pos->col) > 1 || abs(pRow - pos->row) > 1) {
-        //         continue;
-        //     }
-        // }
+        if (enemy->getComponent<EnemyTypeComponent>()->enemy_type == "dragon")
+        {
+            std::shared_ptr<GuardingPositionComponent> pos = enemy->getComponent<GuardingPositionComponent>();
+            if (abs(pCol - pos->col) > 1 || abs(pRow - pos->row) > 1) {
+                continue;
+            }
+        }
 
         if (random() % 2 == 0) {
             attack(*enemy, player);

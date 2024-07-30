@@ -400,7 +400,6 @@ void SpawnSystem::spawnPotion(EntityManager &entityManager, int x, int y, const 
 {
 
     auto potion = entityManager.createEntity();
-    potion->addComponent(std::make_shared<ItemTypeComponent>("potion"));
     potion->addComponent(std::make_shared<PositionComponent>(x, y));
     potion->addComponent(std::make_shared<DisplayComponent>('P'));
     potion->addComponent(std::make_shared<PotionTypeComponent>(potionType));

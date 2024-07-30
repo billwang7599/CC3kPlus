@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
     InputSystem inputSystem;
     MovementSystem movementSystem;
 
+    // Setup
     std::vector<EntityManager> entityManagers(NUM_FLOORS);
     if (!filePath.empty())
     {
@@ -48,22 +49,32 @@ int main(int argc, char *argv[])
             // displaySystem.update(entityManager); // prints out floor
         }
     }
+
+    // Game
     shared_ptr<Entity> player;
-    for (auto e : entityManagers[floor].getEntities()) {
-        if (e->getComponent<PlayerRaceComponent>()) {
+    for (auto e : entityManagers[floor].getEntities())
+    {
+        if (e->getComponent<PlayerRaceComponent>())
+        {
             player = e;
             break;
         }
     }
-    while (gameLoop) {
-        try {
+    while (gameLoop)
+    {
+        try
+        {
             // the order matters
             inputSystem.update(player);
             movementSystem.update(entityManagers[floor], player);
             combatSystem.update(entityManagers[floor], player);
-        } catch (std::string e) {
+        }
+        catch (std::string e)
+        {
             std::cout << e << '\n';
-        } catch (char const* e) {
+        }
+        catch (char const *e)
+        {
             std::cout << e << '\n';
         } catch (exception& e) {
             std::cout << "Exception: " << e.what() << '\n';

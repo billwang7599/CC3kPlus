@@ -22,5 +22,7 @@
 #include "components/potion_type_component.h"
 #include "components/stairs_component.h"
 #include "components/treasure_component.h"
+#include "components/action_component.h"
+#include "components/direction_component.h"
 
 #endif // COMPONENTS_H

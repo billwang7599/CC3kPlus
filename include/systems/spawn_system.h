@@ -17,9 +17,9 @@ class SpawnSystem
 
 public:
     void readFloors(std::vector<EntityManager> &entityManagers, const std::string &filePath);
-    void newFloor(EntityManager &entityManager, const int seed, bool spawn_barrier_suit);
+    void newFloor(EntityManager &entityManager, const int seed, bool spawnBarrierSuit);
     void spawnPlayer(EntityManager &entityManager, int x, int y, const std::string &race);
-    void spawnEnemy(EntityManager &entityManager, int x, int y, const std::string &enemyType);
+    void spawnEnemy(EntityManager &entityManager, int x, int y, const std::string &enemyType, bool withCompass);
     void spawnPotion(EntityManager &entityManager, int x, int y, const std::string &potionType);
     void spawnTreasure(EntityManager &entityManager, int x, int y, const int &value);
     void spawnItem(EntityManager &entityManager, int x, int y, const std::string &itemType);

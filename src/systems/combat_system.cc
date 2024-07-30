@@ -23,9 +23,12 @@ void CombatSystem::battle(EntityManager &entities, shared_ptr<Entity> player, co
     shared_ptr<Entity> target;
 
     // Get target
-    try {
+    try
+    {
         target = entities.getEntity(pRow + directions.at(direction).first, pCol + directions.at(direction).second);
-    } catch (exception e) {
+    }
+    catch (exception e)
+    {
         throw "Not a valid direction!";
     }
 
@@ -45,6 +48,11 @@ void CombatSystem::battle(EntityManager &entities, shared_ptr<Entity> player, co
             {
                 player->getComponent<GoldComponent>()->gold += target->getComponent<GoldComponent>()->gold;
             }
+            if (target->getComponent<CompassComponent>())
+            {
+                player->addComponent(std::make_shared<CompassComponent>());
+                std::cout << "Enemy slain had compass" << '\n';
+            };
             entities.removeEntity(target);
         };
     }
@@ -68,14 +76,19 @@ void CombatSystem::enemies_attack(EntityManager &entities, Entity &player)
         }
     }
 
-    for (auto& enemy : enemies) {
-        if (!enemy || !enemy->getComponent<EnemyTypeComponent>()) {
+    for (auto &enemy : enemies)
+    {
+        if (!enemy || !enemy->getComponent<EnemyTypeComponent>())
+        {
             continue;
         }
-        if (random() % 2 == 0) {
+        if (random() % 2 == 0)
+        {
             std::cout << "Enemy is attacking the player" << '\n';
             attack(*enemy, player);
-        } else {
+        }
+        else
+        {
             std::cout << "Enemy missed the player!" << '\n';
         }
     }

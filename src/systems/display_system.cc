@@ -13,7 +13,7 @@ void DisplaySystem::outputColor(char c)
         std::cout << MAG;
     else if (c == 'G')
         std::cout << BHYEL;
-    else if (c == '@')
+    else if (c == '@' || c == '\\')
         std::cout << BHGRN;
     else if (c == 'P')
         std::cout << BHCYN;
@@ -34,7 +34,7 @@ void DisplaySystem::update(EntityManager &entityManager, std::shared_ptr<Entity>
                 std::shared_ptr<DisplayComponent> displayComponent = entity->getComponent<DisplayComponent>();
 
                 auto stairsComponent = entity->getComponent<StairsComponent>();
-                if (stairsComponent && !stairsComponent->visible)
+                if (stairsComponent && !player->getComponent<CompassComponent>())
                 {
                     outputColor(BOARD.at(row).at(col));
                 }

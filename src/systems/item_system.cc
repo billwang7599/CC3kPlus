@@ -16,23 +16,7 @@ void ItemSystem::useTreasure(EntityManager &entityManager, std::shared_ptr<Entit
 
 void ItemSystem::useCompass(EntityManager &entityManager, std::shared_ptr<Entity> player, std::shared_ptr<Entity> compass)
 {
-    // Find stairs
-    std::shared_ptr<Entity> stairs;
-    for (auto &entity : entityManager.getEntities())
-    {
-        if (entity->getComponent<StairsComponent>())
-        {
-            stairs = entity;
-            break;
-        }
-    }
-
-    if (!stairs)
-    {
-        throw std::runtime_error("No stairs found when found compass");
-    }
-
-    stairs->getComponent<StairsComponent>()->visible = true;
+    player->addComponent(std::make_shared<CompassComponent>());
     entityManager.removeEntity(compass);
 }
 

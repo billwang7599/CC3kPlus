@@ -23,7 +23,7 @@ void SpawnSystem::spawnDragonAround(EntityManager &entityManager, int row, int c
             {
                 continue;
             }
-            spawnEnemy(entityManager, dragonPos.first, dragonPos.second, "dragon");
+            spawnEnemy(entityManager, dragonPos.first, dragonPos.second, "dragon", false);
             return;
         }
     }
@@ -38,6 +38,7 @@ void SpawnSystem::readFloors(std::vector<EntityManager> &entityManagers, const s
     {
         EntityManager &entityManager = entityManagers.at(floor);
 
+        bool compass_spawned = false;
         for (int row = 0; row < FLOOR_HEIGHT; row++)
         {
             std::getline(file, line);
@@ -50,31 +51,40 @@ void SpawnSystem::readFloors(std::vector<EntityManager> &entityManagers, const s
                 }
                 else if (tile == 'V')
                 {
-                    spawnEnemy(entityManager, row, col, "vampire");
+
+                    spawnEnemy(entityManager, row, col, "vampire", !compass_spawned);
+                    compass_spawned = true;
                 }
                 else if (tile == 'W')
                 {
-                    spawnEnemy(entityManager, row, col, "werewolf");
+
+                    spawnEnemy(entityManager, row, col, "werewolf", !compass_spawned);
+                    compass_spawned = true;
                 }
                 else if (tile == 'N')
                 {
-                    spawnEnemy(entityManager, row, col, "goblin");
+                    spawnEnemy(entityManager, row, col, "goblin", !compass_spawned);
+                    compass_spawned = true;
                 }
                 else if (tile == 'M')
                 {
-                    spawnEnemy(entityManager, row, col, "merchant");
+                    spawnEnemy(entityManager, row, col, "merchant", !compass_spawned);
+                    compass_spawned = true;
                 }
                 else if (tile == 'D')
                 {
-                    spawnEnemy(entityManager, row, col, "dragon");
+                    spawnEnemy(entityManager, row, col, "dragon", !compass_spawned);
+                    compass_spawned = true;
                 }
                 else if (tile == 'X')
                 {
-                    spawnEnemy(entityManager, row, col, "phoenix");
+                    spawnEnemy(entityManager, row, col, "phoenix", !compass_spawned);
+                    compass_spawned = true;
                 }
                 else if (tile == 'T')
                 {
-                    spawnEnemy(entityManager, row, col, "troll");
+                    spawnEnemy(entityManager, row, col, "troll", !compass_spawned);
+                    compass_spawned = true;
                 }
                 else if (tile == '0')
                 {
@@ -133,7 +143,7 @@ void SpawnSystem::readFloors(std::vector<EntityManager> &entityManagers, const s
     }
 }
 
-void SpawnSystem::newFloor(EntityManager &entityManager, const int seed, bool spawn_barrier_suit)
+void SpawnSystem::newFloor(EntityManager &entityManager, const int seed, bool spawnBarrierSuit)
 {
     // Seed random number generator
     std::srand(seed);
@@ -193,7 +203,7 @@ void SpawnSystem::newFloor(EntityManager &entityManager, const int seed, bool sp
     }
 
     int enemiesToSpawn = 20; // if a dragon is spawned, decrement
-    if (spawn_barrier_suit)
+    if (spawnBarrierSuit)
     {
         int barrierSuitRoom = std::rand() % 5;
         std::pair<int, int> barrierSuitPos = ROOMS[barrierSuitRoom][std::rand() % ROOMS[barrierSuitRoom].size()];
@@ -242,6 +252,7 @@ void SpawnSystem::newFloor(EntityManager &entityManager, const int seed, bool sp
     }
 
     // Spawn 20 enemies
+    int enemyWithCompassIndex = std::rand() % 20;
     while (enemiesToSpawn > 0)
     {
         int enemyRoom = std::rand() % 5;
@@ -280,7 +291,7 @@ void SpawnSystem::newFloor(EntityManager &entityManager, const int seed, bool sp
             enemyType = "merchant";
         }
 
-        spawnEnemy(entityManager, enemyPos.first, enemyPos.second, enemyType);
+        spawnEnemy(entityManager, enemyPos.first, enemyPos.second, enemyType, enemiesToSpawn == enemyWithCompassIndex);
         enemiesToSpawn--;
     }
 }
@@ -324,7 +335,7 @@ void SpawnSystem::spawnPlayer(EntityManager &entityManager, int x, int y, const 
     player->addComponent(std::make_shared<DirectionComponent>());
 }
 
-void SpawnSystem::spawnEnemy(EntityManager &entityManager, int x, int y, const std::string &enemyType)
+void SpawnSystem::spawnEnemy(EntityManager &entityManager, int x, int y, const std::string &enemyType, bool withCompass)
 {
     auto enemy = entityManager.createEntity();
     if (enemyType == "vampire")
@@ -394,6 +405,10 @@ void SpawnSystem::spawnEnemy(EntityManager &entityManager, int x, int y, const s
     enemy->addComponent(std::make_shared<MoveableComponent>(true));
     enemy->addComponent(std::make_shared<EnemyTypeComponent>(enemyType));
     enemy->addComponent(std::make_shared<PositionComponent>(x, y));
+    if (withCompass)
+    {
+        enemy->addComponent(std::make_shared<CompassComponent>());
+    }
 }
 
 void SpawnSystem::spawnPotion(EntityManager &entityManager, int x, int y, const std::string &potionType)
@@ -443,6 +458,6 @@ void SpawnSystem::spawnItem(EntityManager &entityManager, int x, int y, const st
     else if (itemType == "stairs")
     {
         item->addComponent(std::make_shared<DisplayComponent>('\\'));
-        item->addComponent(std::make_shared<StairsComponent>(false));
+        item->addComponent(std::make_shared<StairsComponent>());
     }
 }

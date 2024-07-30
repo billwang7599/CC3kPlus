@@ -32,7 +32,7 @@ std::shared_ptr<Entity> EntityManager::getEntity(int row, int col)
     return nullptr;
 }
 
-std::vector<std::shared_ptr<Entity>> EntityManager::getEntities()
+std::vector<std::shared_ptr<Entity>> &EntityManager::getEntities()
 {
     return entities;
 }

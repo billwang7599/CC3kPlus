@@ -7,89 +7,112 @@
 
 using namespace std;
 
-void CombatSystem::update(EntityManager& entities, shared_ptr<Entity> player) {
-    if (player->getComponent<ActionComponent>()->attack) {
+void CombatSystem::update(EntityManager &entities, shared_ptr<Entity> player)
+{
+    if (player->getComponent<ActionComponent>()->attack)
+    {
         battle(entities, player, player->getComponent<DirectionComponent>()->direction);
     }
 }
 
-void CombatSystem::battle(EntityManager& entities, shared_ptr<Entity> player, const string& direction) {
+void CombatSystem::battle(EntityManager &entities, shared_ptr<Entity> player, const string &direction)
+{
     const int pCol = player->getComponent<PositionComponent>()->col;
     const int pRow = player->getComponent<PositionComponent>()->row;
     shared_ptr<Entity> target;
 
     // Get target
-    if (direction == "no") {
+    if (direction == "no")
+    {
         target = entities.getEntity(pCol, pRow + 1);
-
-    } else if (direction == "ea") {
+    }
+    else if (direction == "ea")
+    {
         target = entities.getEntity(pCol + 1, pRow);
-
-    }  else if (direction == "so") {
+    }
+    else if (direction == "so")
+    {
         target = entities.getEntity(pCol, pRow - 1);
-
-    }  else if (direction == "we") {
+    }
+    else if (direction == "we")
+    {
         target = entities.getEntity(pCol - 1, pRow);
-
-    }  else if (direction == "ne") {
+    }
+    else if (direction == "ne")
+    {
         target = entities.getEntity(pCol + 1, pRow + 1);
-
-    }  else if (direction == "nw") {
+    }
+    else if (direction == "nw")
+    {
         target = entities.getEntity(pCol - 1, pRow + 1);
-
-    }  else if (direction == "se") {
+    }
+    else if (direction == "se")
+    {
         target = entities.getEntity(pCol + 1, pRow - 1);
-
-    }  else if (direction == "sw") {
+    }
+    else if (direction == "sw")
+    {
         target = entities.getEntity(pCol - 1, pRow - 1);
-
-    } else {
+    }
+    else
+    {
         throw "Not a valid direction!";
     }
 
-    if (!target) {
+    if (!target)
+    {
         std::cout << "No target there!" << '\n';
-    } else {
+    }
+    else
+    {
         std::cout << "Player is attacking the enemy" << '\n';
         attack(*player, *target);
 
         // check if target died
-        if (checkDeath(*target)) {
-            if (target->getComponent<GoldComponent>()) {
+        if (checkDeath(*target))
+        {
+            if (target->getComponent<GoldComponent>())
+            {
                 player->getComponent<GoldComponent>()->gold += target->getComponent<GoldComponent>()->gold;
             }
             entities.removeEntity(target);
         };
     }
 
-
     enemies_attack(entities, *player);
     std::cout << '\n';
 }
 
-void CombatSystem::enemies_attack(EntityManager& entities, Entity& player) {
+void CombatSystem::enemies_attack(EntityManager &entities, Entity &player)
+{
     const int pCol = player.getComponent<PositionComponent>()->col;
     const int pRow = player.getComponent<PositionComponent>()->row;
     vector<shared_ptr<Entity>> enemies;
 
-    for (int i = -1; i <= 1; i++) {
-        for (int j = -1; j <= 1; j++) {
-            if (i == j && i == 0) {
+    for (int i = -1; i <= 1; i++)
+    {
+        for (int j = -1; j <= 1; j++)
+        {
+            if (i == j && i == 0)
+            {
                 continue;
             }
             enemies.push_back(entities.getEntity(pCol + i, pRow + j));
         }
     }
 
-    for (auto& enemy : enemies) {
-        if (!enemy) {
+    for (auto &enemy : enemies)
+    {
+        if (!enemy)
+        {
             continue;
         }
         random_device rd;
         mt19937 gen(rd());
         uniform_int_distribution<> distrib(0, 1);
         int result = distrib(gen);
-        if (result == 0) {
+        if (result == 0)
+        {
             std::cout << "Enemy is attacking the player" << '\n';
             attack(*enemy, player);
         }
@@ -97,41 +120,48 @@ void CombatSystem::enemies_attack(EntityManager& entities, Entity& player) {
     }
 }
 
-bool CombatSystem::checkDeath(Entity& e) {
+bool CombatSystem::checkDeath(Entity &e)
+{
     auto health = e.getComponent<HealthComponent>();
-    return health->current_health <= 0;
+    return health->currentHealth <= 0;
 }
 
-void CombatSystem::attack(Entity& attacker, Entity& defender) {
+void CombatSystem::attack(Entity &attacker, Entity &defender)
+{
     // assumes we know who is attacking & defending
     // check if they have component before accessing
-    int attack, potion_attack = 0, defense, potion_defense = 0, damage;
-    const auto potion_A = attacker.getComponent<PotionEffectComponent>();
-    const auto potion_D = defender.getComponent<PotionEffectComponent>();
-    int& health = defender.getComponent<HealthComponent>()->current_health;
+    const auto attackerPotionEffect = attacker.getComponent<PotionEffectComponent>();
+    const auto defenderPotionEffect = defender.getComponent<PotionEffectComponent>();
 
-    if (potion_A) {
-        potion_attack = potion_A->attack_change;
+    int &health = defender.getComponent<HealthComponent>()->currentHealth;
+
+    int attack = attacker.getComponent<AttackComponent>()->attackPower;
+    int defense = defender.getComponent<DefenseComponent>()->defensePower;
+
+    if (attackerPotionEffect)
+    {
+        attack += attackerPotionEffect->attackChange;
     }
-    if (potion_D) {
-        defense = potion_D->defense_change;
+    if (defenderPotionEffect)
+    {
+        defense += defenderPotionEffect->defenseChange;
     }
 
+    int damage = ceil((100.0) / (100 + defense)) * (attack);
 
-    attack = attacker.getComponent<AttackComponent>()->attack_power;
-    defense = defender.getComponent<DefenseComponent>()->defense_power;
-    damage = ceil((100.0)/(100 + defense + potion_defense)) * (attack + potion_attack);
-
-    if (defender.getComponent<BarrierSuitComponent>() != nullptr) {
+    if (defender.getComponent<BarrierSuitComponent>())
+    {
         damage = ceil(damage / 2);
     }
 
     // check for abilities
-    if (attacker.getComponent<GoldStealComponent>()) {
+    if (attacker.getComponent<GoldStealComponent>())
+    {
         goldsteal(attacker, defender);
     }
 
-    if (attacker.getComponent<LifestealComponent>()) {
+    if (attacker.getComponent<LifestealComponent>())
+    {
         lifesteal(attacker, damage);
     }
 
@@ -139,9 +169,11 @@ void CombatSystem::attack(Entity& attacker, Entity& defender) {
     std::cout << damage << " damage done!" << '\n';
 }
 
-void CombatSystem::goldsteal(Entity& attacker, Entity& target) {
+void CombatSystem::goldsteal(Entity &attacker, Entity &target)
+{
     // if the target doesn't have any gold, return
-    if (!target.getComponent<GoldComponent>()) {
+    if (!target.getComponent<GoldComponent>())
+    {
         return;
     }
 
@@ -151,8 +183,9 @@ void CombatSystem::goldsteal(Entity& attacker, Entity& target) {
     target.getComponent<GoldComponent>()->gold -= amount;
 }
 
-void CombatSystem::lifesteal(Entity& attacker, int damage) {
+void CombatSystem::lifesteal(Entity &attacker, int damage)
+{
     auto health = attacker.getComponent<HealthComponent>();
     const auto lifesteal = attacker.getComponent<LifestealComponent>();
-    health->current_health = min(health->max_health, int(health->current_health + damage * lifesteal->percentageStolen));
+    health->currentHealth = min(health->maxHealth, int(health->currentHealth + damage * lifesteal->percentageStolen));
 }

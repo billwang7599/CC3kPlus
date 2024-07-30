@@ -21,8 +21,7 @@ public:
     std::shared_ptr<Entity> createEntity();
     void removeEntity(std::shared_ptr<Entity> entity);
     std::shared_ptr<Entity> getEntity(int row, int col);
-    std::vector<std::shared_ptr<Entity>> getEntities();
+    std::vector<std::shared_ptr<Entity>> &getEntities();
 };
-
 
 #endif

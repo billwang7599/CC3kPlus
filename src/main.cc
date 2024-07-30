@@ -16,8 +16,11 @@ int main(int argc, char *argv[])
     // entity test
     EntityManager entitites = EntityManager{};
     spawn.spawnEnemy(entitites, 1, 0, "goblin");
-    spawn.spawnPlayer(entitites, 0, 0, "human");
-    shared_ptr<Entity> player = entitites.getEntity(0, 0);
+    spawn.spawnEnemy(entitites, 0, 1, "goblin");
+    spawn.spawnEnemy(entitites, 0, 0, "goblin");
+    spawn.spawnEnemy(entitites, 2, 1, "goblin");
+    spawn.spawnPlayer(entitites, 1, 1, "human");
+    shared_ptr<Entity> player = entitites.getEntity(1, 1);
 
     // combat test
     try {

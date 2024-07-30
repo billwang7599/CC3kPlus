@@ -7,6 +7,12 @@
 
 using namespace std;
 
+void CombatSystem::update(EntityManager& entities, shared_ptr<Entity> player) {
+    if (player->getComponent<ActionComponent>()->attack) {
+        battle(entities, player, player->getComponent<DirectionComponent>()->direction);
+    }
+}
+
 void CombatSystem::battle(EntityManager& entities, shared_ptr<Entity> player, const string& direction) {
     const int pCol = player->getComponent<PositionComponent>()->col;
     const int pRow = player->getComponent<PositionComponent>()->row;

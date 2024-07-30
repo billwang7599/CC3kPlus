@@ -11,7 +11,7 @@ void PotionSystem::usePotion(EntityManager &entityManager, std::shared_ptr<Entit
     auto healthComponent = player->getComponent<HealthComponent>();
     auto potionEffectComponent = player->getComponent<PotionEffectComponent>();
     seenPotions.push_back(potionType);
-    actionMessage += "PC uses " + potionType + ".\n";
+    actionMessage.push_back("PC uses " + potionType + ".");
 
     if (player->getComponent<AllPositiveComponent>()) {
         if (potionType == "PH")

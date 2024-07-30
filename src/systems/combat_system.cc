@@ -34,7 +34,7 @@ void CombatSystem::battle(EntityManager &entities, shared_ptr<Entity> player, co
     }
 
     if (!target) {
-        actionMessage += "PC attacked " + direction + " but nothing was there...\n";
+        actionMessage.push_back("PC attacked " + direction + " but nothing was there...");
         return;
     }
 
@@ -120,12 +120,11 @@ void CombatSystem::enemies_attack(EntityManager &entities, Entity &player)
         }
         if (random() % 2 == 0)
         {
-            std::cout << "Enemy is attacking the player" << '\n';
             attack(*enemy, player);
         }
         else
         {
-            std::cout << "Enemy missed the player!" << '\n';
+            actionMessage.push_back(enemy->getComponent<EnemyTypeComponent>()->enemy_type + " missed the player!");
         }
     }
 }
@@ -177,10 +176,10 @@ void CombatSystem::attack(Entity &attacker, Entity &defender)
 
     health -= damage;
     if (attacker.getComponent<PlayerRaceComponent>()) {
-        actionMessage += "PC deals " + to_string(damage) + " to " +
-        defender.getComponent<EnemyTypeComponent>()->enemy_type + " (" + to_string(health) + " HP).\n";
+        actionMessage.push_back("PC deals " + to_string(damage) + " to " +
+        defender.getComponent<EnemyTypeComponent>()->enemy_type + " (" + to_string(health) + " HP).");
     } else {
-        actionMessage += attacker.getComponent<EnemyTypeComponent>()->enemy_type + " deals " + to_string(damage) + " to PC.\n";
+        actionMessage.push_back(attacker.getComponent<EnemyTypeComponent>()->enemy_type + " deals " + to_string(damage) + " to PC.");
     }
 }
 

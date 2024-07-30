@@ -15,7 +15,7 @@ class DisplaySystem
     void outputColor(char c);
 
 public:
-    void update(EntityManager &entityManager, std::shared_ptr<Entity> player, int floor, std::string &action);
+    void update(EntityManager &entityManager, std::shared_ptr<Entity> player, int floor);
 };
 
 #endif

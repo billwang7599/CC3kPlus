@@ -4,6 +4,7 @@
 #include "entities/entity.h"
 #include "entities/entity_manager.h"
 #include "components/components.h"
+#include "globals/global.h"
 
 void DisplaySystem::outputColor(char c)
 {
@@ -22,7 +23,7 @@ void DisplaySystem::outputColor(char c)
     std::cout << c << COLOR_RESET;
 }
 
-void DisplaySystem::update(EntityManager &entityManager, std::shared_ptr<Entity> player, int floor, std::string &action)
+void DisplaySystem::update(EntityManager &entityManager, std::shared_ptr<Entity> player, int floor)
 {
     for (int row = 0; row < BOARD.size(); row++)
     {
@@ -72,14 +73,13 @@ void DisplaySystem::update(EntityManager &entityManager, std::shared_ptr<Entity>
     std::cout << "Def: " << player->getComponent<DefenseComponent>()->defensePower << std::endl;
 
     // process action
-    int pos = action.find_last_of('\n');
-    for (int i = 0; i < action.size(); ++i) {
-        if (action[i] == '\n') {
-            if (i != pos) {
-                action[i] = ' ';
-                action[i + 1] = toupper(action[i + 1]);
-            }
+    std::cout << "Action: ";
+    for (int i = 0; i < actionMessage.size(); i++) {
+        actionMessage[i][0] = toupper(actionMessage[i][0]);
+        std::cout << actionMessage[i];
+        if (i != actionMessage.size() - 1) {
+            std::cout << " ";
         }
     }
-    std::cout << "Action: " << action << std::endl;
+    std::cout << "\n";
 }

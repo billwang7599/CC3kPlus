@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
     // Game
     shared_ptr<Entity> player = getPlayer(entityManagers[floor]);
 
-    displaySystem.update(entityManagers[floor], player, floor, actionMessage);
+    displaySystem.update(entityManagers[floor], player, floor);
     actionMessage.clear();
 
     while (gameLoop)
@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
         {
             reset(entityManagers, spawnSystem, seed, filePath, floor);
             player = getPlayer(entityManagers[floor]);
-            displaySystem.update(entityManagers[floor], player, floor, actionMessage);
+            displaySystem.update(entityManagers[floor], player, floor);
             continue;
         }
         else if (input == "q")
@@ -125,8 +125,7 @@ int main(int argc, char *argv[])
             spawnSystem.update(entityManagers, floor, player);
             movementSystem.update(entityManagers[floor], player);
             combatSystem.update(entityManagers[floor], player);
-            displaySystem.update(entityManagers[floor], player, floor, actionMessage);
-            actionMessage.clear();
+            displaySystem.update(entityManagers[floor], player, floor);
         }
         catch (std::string e)
         {
@@ -140,6 +139,7 @@ int main(int argc, char *argv[])
         {
             std::cout << "Exception: " << e.what() << '\n';
         }
+        actionMessage.clear();
 
         if (player->getComponent<HealthComponent>()->currentHealth <= 0)
         {
@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
             {
                 reset(entityManagers, spawnSystem, seed, filePath, floor);
                 player = getPlayer(entityManagers[floor]);
-                displaySystem.update(entityManagers[floor], player, floor, actionMessage);
+                displaySystem.update(entityManagers[floor], player, floor);
             }
             else
             {

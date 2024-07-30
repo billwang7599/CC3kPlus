@@ -52,18 +52,17 @@ void MovementSystem::update(EntityManager& entities, std::shared_ptr<Entity> pla
                 }
                 if (std::find(seenPotions.begin(), seenPotions.end(), e->getComponent<PotionTypeComponent>()->potion_type) != seenPotions.end()) {
                     // already seen
-                    actionMessage +=
-                        "PC moves " + player->getComponent<DirectionComponent>()->direction +
-                        " and sees a " + e->getComponent<PotionTypeComponent>()->potion_type + " potion.\n";
+                    actionMessage.push_back("PC moves " + player->getComponent<DirectionComponent>()->direction +
+                        " and sees a " + e->getComponent<PotionTypeComponent>()->potion_type + " potion.");
                 } else {
-                    actionMessage +=
+                    actionMessage.push_back(
                         "PC moves " + player->getComponent<DirectionComponent>()->direction +
-                        " and sees an unkown potion.\n";
+                        " and sees an unkown potion.");
                 }
             }
         }
-        if (actionMessage == "") {
-            actionMessage += "PC moves " + player->getComponent<DirectionComponent>()->direction + ".\n";
+        if (actionMessage.size() == 0) {
+            actionMessage.push_back("PC moves " + player->getComponent<DirectionComponent>()->direction + ".");
         }
     }
 

@@ -461,3 +461,31 @@ void SpawnSystem::spawnItem(EntityManager &entityManager, int x, int y, const st
         item->addComponent(std::make_shared<StairsComponent>());
     }
 }
+
+void SpawnSystem::update(std::vector<EntityManager> &entityManagers, int floor, std::shared_ptr<Entity> player)
+{
+    EntityManager &entityManager = entityManagers.at(floor);
+
+    std::shared_ptr<ActionComponent> actionComponent = player->getComponent<ActionComponent>();
+    if (!actionComponent->move)
+        return;
+
+    std::shared_ptr<PositionComponent> positionComponent = player->getComponent<PositionComponent>();
+    std::string &direction = player->getComponent<DirectionComponent>()->direction;
+    int row = positionComponent->row + DIRECTION_MAP.at(direction).first;
+    int col = positionComponent->col + DIRECTION_MAP.at(direction).second;
+    std::shared_ptr<Entity> entity = entityManager.getEntity(row, col);
+
+    if (!entity)
+    {
+        return;
+    }
+
+    std::shared_ptr<StairsComponent> stairsComponent = entity->getComponent<StairsComponent>();
+    if (!stairsComponent)
+    {
+        return;
+    }
+
+    // Move to next floor
+}

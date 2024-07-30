@@ -23,6 +23,7 @@ public:
     void spawnPotion(EntityManager &entityManager, int x, int y, const std::string &potionType);
     void spawnTreasure(EntityManager &entityManager, int x, int y, const int &value);
     void spawnItem(EntityManager &entityManager, int x, int y, const std::string &itemType);
+    void update(std::vector<EntityManager> &entityManagers, int floor, std::shared_ptr<Entity> player);
 };
 
 #endif

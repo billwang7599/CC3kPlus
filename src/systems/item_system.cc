@@ -2,6 +2,7 @@
 #include "entities/entity_manager.h"
 #include "entities/entity.h"
 #include "components/components.h"
+#include "constants/constants.h"
 
 void ItemSystem::useTreasure(EntityManager &entityManager, std::shared_ptr<Entity> player, std::shared_ptr<Entity> treasure)
 {
@@ -34,42 +35,12 @@ void ItemSystem::update(EntityManager &entityManager, std::shared_ptr<Entity> pl
         return;
 
     std::shared_ptr<PositionComponent> positionComponent = player->getComponent<PositionComponent>();
-    std::shared_ptr<Entity> item;
 
     std::string &direction = player->getComponent<DirectionComponent>()->direction;
-    if (direction == "no")
-    {
-        item = entityManager.getEntity(positionComponent->row - 1, positionComponent->col);
-    }
-    else if (direction == "so")
-    {
-        item = entityManager.getEntity(positionComponent->row + 1, positionComponent->col);
-    }
-    else if (direction == "ea")
-    {
-        item = entityManager.getEntity(positionComponent->row, positionComponent->col + 1);
-    }
-    else if (direction == "we")
-    {
-        item = entityManager.getEntity(positionComponent->row, positionComponent->col - 1);
-    }
-    else if (direction == "ne")
-    {
-        item = entityManager.getEntity(positionComponent->row - 1, positionComponent->col + 1);
-    }
-    else if (direction == "nw")
-    {
-        item = entityManager.getEntity(positionComponent->row - 1, positionComponent->col - 1);
-    }
-    else if (direction == "se")
-    {
-        item = entityManager.getEntity(positionComponent->row + 1, positionComponent->col + 1);
-    }
-    else if (direction == "sw")
-    {
-        item = entityManager.getEntity(positionComponent->row + 1, positionComponent->col - 1);
-    }
 
+    int row = positionComponent->row + DIRECTION_MAP.at(direction).first;
+    int col = positionComponent->col + DIRECTION_MAP.at(direction).second;
+    std::shared_ptr<Entity> item = entityManager.getEntity(row, col);
     if (!item)
     {
         return;
@@ -92,9 +63,5 @@ void ItemSystem::update(EntityManager &entityManager, std::shared_ptr<Entity> pl
     else if (itemTypeComponent->item_type == "barrier_suit")
     {
         useBarrierSuit(entityManager, player, item);
-    }
-    else if (itemTypeComponent->item_type == "stairs")
-    {
-        // TODO: handle creating a new floor
     }
 }

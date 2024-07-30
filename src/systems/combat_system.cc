@@ -25,7 +25,7 @@ void CombatSystem::battle(EntityManager &entities, shared_ptr<Entity> player, co
     // Get target
     try
     {
-        target = entities.getEntity(pRow + directions.at(direction).first, pCol + directions.at(direction).second);
+        target = entities.getEntity(pRow + DIRECTION_MAP.at(direction).first, pCol + DIRECTION_MAP.at(direction).second);
     }
     catch (exception e)
     {

@@ -33,7 +33,8 @@ void CombatSystem::battle(EntityManager &entities, shared_ptr<Entity> player, co
         throw "Not a valid direction!";
     }
 
-    if (!target) {
+    if (!target)
+    {
         actionMessage.push_back("PC attacked " + direction + " but nothing was there...");
         return;
     }
@@ -50,13 +51,13 @@ void CombatSystem::battle(EntityManager &entities, shared_ptr<Entity> player, co
     if (target->getComponent<EnemyTypeComponent>()->enemy_type == "merchant")
     {
         // if he is non hostile, change all merchants to hostile
-        merchantHostile = true;
         target->removeComponent<EnemyTypeComponent>();
         target->removeComponent<DisplayComponent>();
         target->addComponent(std::make_shared<DisplayComponent>('G'));
         target->addComponent(std::make_shared<TreasureComponent>(4));
         target->addComponent(std::make_shared<ItemTypeComponent>("treasure"));
         target->addComponent(std::make_shared<CanPickupComponent>());
+        return;
     }
 
     // if dragon, then make the treasure it's guarding pick uppable
@@ -127,12 +128,14 @@ void CombatSystem::enemies_attack(EntityManager &entities, Entity &player)
         if (enemy->getComponent<EnemyTypeComponent>()->enemy_type == "dragon")
         {
             std::shared_ptr<GuardingPositionComponent> pos = enemy->getComponent<GuardingPositionComponent>();
-            if (abs(pCol - pos->col) > 1 || abs(pRow - pos->row) > 1) {
+            if (abs(pCol - pos->col) > 1 || abs(pRow - pos->row) > 1)
+            {
                 continue;
             }
         }
 
-        if (random() % 2 == 0) {
+        if (random() % 2 == 0)
+        {
             attack(*enemy, player);
         }
         else
@@ -188,10 +191,18 @@ void CombatSystem::attack(Entity &attacker, Entity &defender)
     }
 
     health -= damage;
-    if (attacker.getComponent<PlayerRaceComponent>()) {
+    if (attacker.getComponent<PlayerRaceComponent>())
+    {
         actionMessage.push_back("PC deals " + to_string(damage) + " to " +
-        defender.getComponent<EnemyTypeComponent>()->enemy_type + " (" + to_string(health) + " HP).");
-    } else {
+                                defender.getComponent<EnemyTypeComponent>()->enemy_type + " (" + to_string(health) + " HP).");
+
+        if (defender.getComponent<EnemyTypeComponent>()->enemy_type == "merchant")
+        {
+            merchantHostile = true;
+        }
+    }
+    else
+    {
         actionMessage.push_back(attacker.getComponent<EnemyTypeComponent>()->enemy_type + " deals " + to_string(damage) + " to PC.");
     }
 }

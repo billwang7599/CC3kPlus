@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 {
     bool gameLoop = true;
     std::string filePath;
-    int seed = 2123;
+    int seed = 1231312;
     std::srand(seed);
 
     if (argc > 1)
@@ -179,12 +179,16 @@ int main(int argc, char *argv[])
         {
             std::cout << "Congratulations! You have completed the game!" << std::endl;
 
-            int score = player->getComponent<GoldComponent>()->gold;
+            float score = player->getComponent<GoldComponent>()->gold;
             if (player->getComponent<PlayerRaceComponent>()->race == "human")
             {
                 score *= 1.5;
             }
-            std::cout << "Your score is: " << score << std::endl;
+
+            std::ostringstream scoreStream;
+            scoreStream << std::fixed << std::setprecision(1) << score;
+
+            std::cout << "Your score is: " << scoreStream.str() << std::endl;
 
             std::cout << "Would you like to play again? (y/n)" << std::endl;
             char playAgain;

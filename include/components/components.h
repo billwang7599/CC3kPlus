@@ -8,7 +8,6 @@
 #include "components/component.h"
 #include "components/defense_component.h"
 #include "components/display_component.h"
-#include "components/enemy_has_compass_component.h"
 #include "components/enemy_type_component.h"
 #include "components/gold_component.h"
 #include "components/goldsteal_component.h"

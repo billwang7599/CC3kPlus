@@ -137,7 +137,6 @@ int main(int argc, char *argv[])
             movementSystem.update(entityManagers[floor], player);
             combatSystem.update(entityManagers[floor], player);
             displaySystem.update(entityManagers[floor], player, floor);
-            actionMessage.clear();
         }
         catch (std::string e)
         {
@@ -151,6 +150,7 @@ int main(int argc, char *argv[])
         {
             std::cout << "Exception: " << e.what() << '\n';
         }
+        actionMessage.clear();
 
         // Lost the game
         if (player->getComponent<HealthComponent>()->currentHealth <= 0)

@@ -4,13 +4,14 @@
 #include <iostream>
 #include "systems/combat_system.h"
 #include "entities/entity_manager.h"
-
+#include "constants/constants.h"
 using namespace std;
 
 void CombatSystem::update(EntityManager& entities, shared_ptr<Entity> player) {
     if (player->getComponent<ActionComponent>()->attack) {
         battle(entities, player, player->getComponent<DirectionComponent>()->direction);
     }
+    enemies_attack(entities, *player);
 }
 
 void CombatSystem::battle(EntityManager& entities, shared_ptr<Entity> player, const string& direction) {
@@ -19,31 +20,9 @@ void CombatSystem::battle(EntityManager& entities, shared_ptr<Entity> player, co
     shared_ptr<Entity> target;
 
     // Get target
-    if (direction == "no") {
-        target = entities.getEntity(pCol, pRow + 1);
-
-    } else if (direction == "ea") {
-        target = entities.getEntity(pCol + 1, pRow);
-
-    }  else if (direction == "so") {
-        target = entities.getEntity(pCol, pRow - 1);
-
-    }  else if (direction == "we") {
-        target = entities.getEntity(pCol - 1, pRow);
-
-    }  else if (direction == "ne") {
-        target = entities.getEntity(pCol + 1, pRow + 1);
-
-    }  else if (direction == "nw") {
-        target = entities.getEntity(pCol - 1, pRow + 1);
-
-    }  else if (direction == "se") {
-        target = entities.getEntity(pCol + 1, pRow - 1);
-
-    }  else if (direction == "sw") {
-        target = entities.getEntity(pCol - 1, pRow - 1);
-
-    } else {
+    try {
+        target = entities.getEntity(pRow + directions.at(direction).first, pCol + directions.at(direction).second);
+    } catch (exception e) {
         throw "Not a valid direction!";
     }
 
@@ -62,9 +41,6 @@ void CombatSystem::battle(EntityManager& entities, shared_ptr<Entity> player, co
         };
     }
 
-
-    enemies_attack(entities, *player);
-    std::cout << '\n';
 }
 
 void CombatSystem::enemies_attack(EntityManager& entities, Entity& player) {
@@ -77,23 +53,20 @@ void CombatSystem::enemies_attack(EntityManager& entities, Entity& player) {
             if (i == j && i == 0) {
                 continue;
             }
-            enemies.push_back(entities.getEntity(pCol + i, pRow + j));
+            enemies.push_back(entities.getEntity(pRow + i, pCol + j));
         }
     }
 
     for (auto& enemy : enemies) {
-        if (!enemy) {
+        if (!enemy || !enemy->getComponent<EnemyTypeComponent>()) {
             continue;
         }
-        random_device rd;
-        mt19937 gen(rd());
-        uniform_int_distribution<> distrib(0, 1);
-        int result = distrib(gen);
-        if (result == 0) {
+        if (random() % 2 == 0) {
             std::cout << "Enemy is attacking the player" << '\n';
             attack(*enemy, player);
+        } else {
+            std::cout << "Enemy missed the player!" << '\n';
         }
-        enemy->getComponent<MoveableComponent>()->moveable = false;
     }
 }
 

@@ -54,8 +54,14 @@ void DisplaySystem::update(EntityManager &entityManager, std::shared_ptr<Entity>
         std::cout << std::endl;
     }
     std::string output = "";
+
     output += "Race: " + player->getComponent<PlayerRaceComponent>()->race;
-    output += " Gold: " + std::to_string(player->getComponent<GoldComponent>()->gold);
+
+    // Format gold to 1 decimal place
+    std::ostringstream goldStream;
+    goldStream << std::fixed << std::setprecision(1) << player->getComponent<GoldComponent>()->gold;
+    output += " Gold: " + goldStream.str();
+
     output += " Floor: " + std::to_string(floor + 1);
 
     std::string attack_output = std::to_string(player->getComponent<AttackComponent>()->attackPower);

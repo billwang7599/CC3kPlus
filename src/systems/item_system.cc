@@ -9,9 +9,10 @@ void ItemSystem::useTreasure(EntityManager &entityManager, std::shared_ptr<Entit
     std::shared_ptr<TreasureComponent> treasureComponent = treasure->getComponent<TreasureComponent>();
     std::shared_ptr<GoldComponent> playerGoldComponent = player->getComponent<GoldComponent>();
     std::shared_ptr<GoldMultiplierComponent> multiplier = player->getComponent<GoldMultiplierComponent>();
-    int gold = treasureComponent->value;
+    float gold = treasureComponent->value;
 
-    if (multiplier) {
+    if (multiplier)
+    {
         gold *= multiplier->percent;
     }
 

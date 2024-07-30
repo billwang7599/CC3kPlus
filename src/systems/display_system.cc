@@ -1,9 +1,9 @@
 #include "systems/display_system.h"
 #include "constants/constants.h"
 #include "constants/colours.h"
+#include "entities/entity.h"
 #include "entities/entity_manager.h"
-#include "components/display_component.h"
-#include "components/stairs_component.h"
+#include "components/components.h"
 
 void DisplaySystem::outputColor(char c)
 {
@@ -22,7 +22,7 @@ void DisplaySystem::outputColor(char c)
     std::cout << c << COLOR_RESET;
 }
 
-void DisplaySystem::update(EntityManager &entityManager)
+void DisplaySystem::update(EntityManager &entityManager, std::shared_ptr<Entity> player, int floor, std::string &action)
 {
     for (int row = 0; row < BOARD.size(); row++)
     {
@@ -50,4 +50,14 @@ void DisplaySystem::update(EntityManager &entityManager)
         }
         std::cout << std::endl;
     }
+    std::string output = "";
+    output += "Race: " + player->getComponent<PlayerRaceComponent>()->race;
+    output += " Gold: " + std::to_string(player->getComponent<GoldComponent>()->gold);
+    output += " Floor: " + std::to_string(floor + 1);
+
+    std::cout << output << std::endl;
+    std::cout << "HP: " << player->getComponent<HealthComponent>()->currentHealth << std::endl;
+    std::cout << "Atk: " << player->getComponent<AttackComponent>()->attackPower << std::endl;
+    std::cout << "Def: " << player->getComponent<DefenseComponent>()->defensePower << std::endl;
+    std::cout << "Action: " << action << std::endl;
 }

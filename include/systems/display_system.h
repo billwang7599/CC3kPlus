@@ -8,13 +8,14 @@
 using namespace std;
 
 class EntityManager;
+class Entity;
 
 class DisplaySystem
 {
     void outputColor(char c);
 
 public:
-    void update(EntityManager &);
+    void update(EntityManager &entityManager, std::shared_ptr<Entity> player, int floor, std::string &action);
 };
 
 #endif

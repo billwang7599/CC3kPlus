@@ -1,7 +1,7 @@
 #include "systems/display_system.h"
 #include "constants/constants.h"
 #include "entities/entity_manager.h"
-#include "display_component.h"
+#include "components/display_component.h"
 
 void DisplaySystem::update(EntityManager &entityManager)
 {

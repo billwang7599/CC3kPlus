@@ -14,17 +14,17 @@ class EntityManager;
 class Entity;
 class SpawnSystem
 {
-    void spawnDragonAround(EntityManager &entityManager, int row, int col);
+    std::shared_ptr<Entity> spawnDragonAround(EntityManager &entityManager, int row, int col);
     void moveToNextFloor(std::vector<EntityManager> &entityManagers, int &floor, std::shared_ptr<Entity> player);
 
 public:
     void readFloors(std::vector<EntityManager> &entityManagers, const std::string &filePath);
-    void newFloor(EntityManager &entityManager, const int seed, bool spawnBarrierSuit);
-    void spawnPlayer(EntityManager &entityManager, int x, int y, const std::string &race);
-    void spawnEnemy(EntityManager &entityManager, int x, int y, const std::string &enemyType, bool withCompass);
-    void spawnPotion(EntityManager &entityManager, int x, int y, const std::string &potionType);
-    void spawnTreasure(EntityManager &entityManager, int x, int y, const int &value);
-    void spawnItem(EntityManager &entityManager, int x, int y, const std::string &itemType);
+    void newFloor(EntityManager &entityManager, const int seed, bool spawn_barrier_suit);
+    std::shared_ptr<Entity> spawnPlayer(EntityManager &entityManager, int x, int y, const std::string &race);
+    std::shared_ptr<Entity> spawnEnemy(EntityManager &entityManager, int x, int y, const std::string &enemyType, bool withCompass);
+    std::shared_ptr<Entity> spawnPotion(EntityManager &entityManager, int x, int y, const std::string &potionType);
+    std::shared_ptr<Entity> spawnTreasure(EntityManager &entityManager, int x, int y, const int &value);
+    std::shared_ptr<Entity> spawnItem(EntityManager &entityManager, int x, int y, const std::string &itemType);
     void update(std::vector<EntityManager> &entityManagers, int &floor, std::shared_ptr<Entity> player);
 };
 

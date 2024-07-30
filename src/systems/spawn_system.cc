@@ -3,7 +3,7 @@
 #include "entities/entity.h"
 #include "constants/constants.h"
 
-void SpawnSystem::spawnDragonAround(EntityManager &entityManager, int row, int col)
+std::shared_ptr<Entity> SpawnSystem::spawnDragonAround(EntityManager &entityManager, int row, int col)
 {
     while (true)
     {
@@ -23,10 +23,9 @@ void SpawnSystem::spawnDragonAround(EntityManager &entityManager, int row, int c
         {
             continue;
         }
-        spawnEnemy(entityManager, dragonPos.first, dragonPos.second, "dragon", false);
-        // get dragon and give it Guarding Position component
-        entityManager.getEntity(dragonPos.first, dragonPos.second)->addComponent(std::make_shared<GuardingPositionComponent>(row, col));
-        return;
+        std::shared_ptr<Entity> dragon = spawnEnemy(entityManager, dragonPos.first, dragonPos.second, "dragon", false);
+        dragon->addComponent(std::make_shared<GuardingPositionComponent>(row, col));
+        return dragon;
     }
 }
 
@@ -117,8 +116,9 @@ void SpawnSystem::readFloors(std::vector<EntityManager> &entityManagers, const s
                 }
                 else if (tile == 'D')
                 {
-                    spawnEnemy(entityManager, row, col, "dragon", !compass_spawned);
-                    compass_spawned = true;
+                    std::shared_ptr<Entity> dragon = spawnEnemy(entityManager, row, col, "dragon", false);
+                    // TODO: find an actual dragon hoard/barrier suit to guard
+                    dragon->addComponent(std::make_shared<GuardingPositionComponent>(row - 1, col));
                 }
                 else if (tile == 'X')
                 {
@@ -340,7 +340,7 @@ void SpawnSystem::newFloor(EntityManager &entityManager, const int seed, bool sp
     }
 }
 
-void SpawnSystem::spawnPlayer(EntityManager &entityManager, int x, int y, const std::string &race)
+std::shared_ptr<Entity> SpawnSystem::spawnPlayer(EntityManager &entityManager, int x, int y, const std::string &race)
 {
     auto player = entityManager.createEntity();
 
@@ -380,9 +380,10 @@ void SpawnSystem::spawnPlayer(EntityManager &entityManager, int x, int y, const 
     player->addComponent(std::make_shared<MoveableComponent>(true));
     player->addComponent(std::make_shared<ActionComponent>());
     player->addComponent(std::make_shared<DirectionComponent>());
+    return player;
 }
 
-void SpawnSystem::spawnEnemy(EntityManager &entityManager, int x, int y, const std::string &enemyType, bool withCompass)
+std::shared_ptr<Entity> SpawnSystem::spawnEnemy(EntityManager &entityManager, int x, int y, const std::string &enemyType, bool withCompass)
 {
     auto enemy = entityManager.createEntity();
     if (enemyType == "vampire")
@@ -458,7 +459,7 @@ void SpawnSystem::spawnEnemy(EntityManager &entityManager, int x, int y, const s
     }
 }
 
-void SpawnSystem::spawnPotion(EntityManager &entityManager, int x, int y, const std::string &potionType)
+std::shared_ptr<Entity> SpawnSystem::spawnPotion(EntityManager &entityManager, int x, int y, const std::string &potionType)
 {
 
     auto potion = entityManager.createEntity();
@@ -466,9 +467,10 @@ void SpawnSystem::spawnPotion(EntityManager &entityManager, int x, int y, const 
     potion->addComponent(std::make_shared<DisplayComponent>('P'));
     potion->addComponent(std::make_shared<PotionTypeComponent>(potionType));
     potion->addComponent(std::make_shared<CanPickupComponent>());
+    return potion;
 }
 
-void SpawnSystem::spawnTreasure(EntityManager &entityManager, int x, int y, const int &value)
+std::shared_ptr<Entity> SpawnSystem::spawnTreasure(EntityManager &entityManager, int x, int y, const int &value)
 {
     auto treasure = entityManager.createEntity();
     treasure->addComponent(std::make_shared<ItemTypeComponent>("treasure"));
@@ -484,9 +486,10 @@ void SpawnSystem::spawnTreasure(EntityManager &entityManager, int x, int y, cons
     {
         treasure->addComponent(std::make_shared<CanPickupComponent>());
     }
+    return treasure;
 }
 
-void SpawnSystem::spawnItem(EntityManager &entityManager, int x, int y, const std::string &itemType)
+std::shared_ptr<Entity> SpawnSystem::spawnItem(EntityManager &entityManager, int x, int y, const std::string &itemType)
 {
     auto item = entityManager.createEntity();
     item->addComponent(std::make_shared<PositionComponent>(x, y));
@@ -535,4 +538,5 @@ void SpawnSystem::update(std::vector<EntityManager> &entityManagers, int &floor,
     }
 
     // Move to next floor
+    moveToNextFloor(entityManagers, floor, player);
 }

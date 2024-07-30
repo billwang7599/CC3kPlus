@@ -91,6 +91,11 @@ bool MovementSystem::moveEntity(EntityManager &entities, Entity &e, std::string 
     if (e.getComponent<EnemyTypeComponent>() && e.getComponent<EnemyTypeComponent>()->enemy_type == "dragon")
     {
         std::shared_ptr<GuardingPositionComponent> guardCoords = e.getComponent<GuardingPositionComponent>();
+        if (!guardCoords)
+        {
+            throw std::runtime_error("Dragon does not have guarding position component");
+        }
+
         if (abs(guardCoords->col - newCol) > 1 || abs(guardCoords->row - newRow) > 1)
         {
             return false;

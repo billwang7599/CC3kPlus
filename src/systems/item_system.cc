@@ -7,10 +7,14 @@ void ItemSystem::useTreasure(EntityManager &entityManager, std::shared_ptr<Entit
 {
     std::shared_ptr<TreasureComponent> treasureComponent = treasure->getComponent<TreasureComponent>();
     std::shared_ptr<GoldComponent> playerGoldComponent = player->getComponent<GoldComponent>();
+    std::shared_ptr<GoldMultiplierComponent> multiplier = player->getComponent<GoldMultiplierComponent>();
+    int gold = treasureComponent->value;
 
-    // TODO: Depending on race, gold value may be different
+    if (multiplier) {
+        gold *= multiplier->percent;
+    }
 
-    playerGoldComponent->gold += treasureComponent->value;
+    playerGoldComponent->gold += gold;
     entityManager.removeEntity(treasure);
 }
 

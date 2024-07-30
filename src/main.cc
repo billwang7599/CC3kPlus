@@ -11,7 +11,7 @@
 int main(int argc, char *argv[])
 {
     std::string filePath;
-    int seed = 0;
+    int seed = 10000;
 
     if (argc > 1)
     {
@@ -20,45 +20,27 @@ int main(int argc, char *argv[])
     if (argc > 2)
     {
         seed = atoi(argv[2]);
-        std::srand(seed);
     }
-
-    std::vector<EntityManager> entityManagers{5};
-    if (!filePath.empty())
-    {
-        // load game
-    }
-    else
-    {
-        for (int i = 0; i < 5; i++)
-        {
-            entityManagers.push_back(EntityManager());
-        }
-    }
-
-    int currentFloor = 0;
-    EntityManager entityManager = entityManagers.at(currentFloor);
+    std::srand(seed);
 
     SpawnSystem spawnSystem;
     CombatSystem combatSystem;
     DisplaySystem displaySystem;
 
+    std::vector<EntityManager> entityManagers(NUM_FLOORS);
     if (!filePath.empty())
     {
-        // load game
+        spawnSystem.readFloors(entityManagers, filePath);
     }
     else
     {
-        spawnSystem.newFloor(entityManager, seed);
-    }
-
-    spawnSystem.spawnPlayer(entityManager, 3, 3, "human");
-    spawnSystem.newFloor(entityManager, 0);
-
-    while (true)
-    {
-        displaySystem.update(entityManager);
-        break;
+        int barrier_suit_floor = std::rand() % 5;
+        for (int i = 0; i < NUM_FLOORS; i++)
+        {
+            EntityManager &entityManager = entityManagers.at(i);
+            spawnSystem.newFloor(entityManager, seed * (i + i), i == barrier_suit_floor);
+            displaySystem.update(entityManager);
+        }
     }
 
     return 0;

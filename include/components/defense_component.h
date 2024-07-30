@@ -6,8 +6,8 @@
 class DefenseComponent : public Component
 {
 public:
-    int defense_power;
-    DefenseComponent(int defense_power) : defense_power{defense_power} {};
+    int defensePower;
+    DefenseComponent(int defensePower) : defensePower{defensePower} {};
 };
 
 #endif // DEFENSE_COMPONENT_H

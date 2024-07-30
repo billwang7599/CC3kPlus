@@ -58,7 +58,6 @@ void CombatSystem::battle(EntityManager &entities, shared_ptr<Entity> player, co
         target->addComponent(std::make_shared<TreasureComponent>(4));
         target->addComponent(std::make_shared<ItemTypeComponent>("treasure"));
         target->addComponent(std::make_shared<CanPickupComponent>());
-        return; // return early as so to not remove the entity
     }
 
     // if dragon, then make the treasure it's guarding pick uppable
@@ -88,7 +87,11 @@ void CombatSystem::battle(EntityManager &entities, shared_ptr<Entity> player, co
         }
         player->getComponent<GoldComponent>()->gold += gold;
     }
-    entities.removeEntity(target);
+
+    if (target->getComponent<EnemyTypeComponent>())
+    {
+        entities.removeEntity(target);
+    }
 }
 
 void CombatSystem::enemies_attack(EntityManager &entities, Entity &player)

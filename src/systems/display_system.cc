@@ -13,8 +13,10 @@ void DisplaySystem::outputColor(char c)
         std::cout << MAG;
     else if (c == 'G')
         std::cout << BHYEL;
-    else if (c == '@' || c == '\\')
+    else if (c == 'C' || c == 'B')
         std::cout << BHGRN;
+    else if (c == '@' || c == '\\')
+        std::cout << BHWHT;
     else if (c == 'P')
         std::cout << BHCYN;
     else if (c == 'V' || c == 'W' || c == 'N' || c == 'M' || c == 'D' || c == 'X' || c == 'T')

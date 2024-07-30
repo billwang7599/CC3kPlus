@@ -36,7 +36,6 @@ void SpawnSystem::moveToNextFloor(std::vector<EntityManager> &entityManagers, in
 
     if (floor >= NUM_FLOORS) // Game won
     {
-        std::cout << "Congratulations! You have won the game!" << std::endl;
         return;
     }
 

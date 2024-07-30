@@ -6,6 +6,16 @@
 #include <iostream>
 #include <cmath>
 
+bool compare(std::shared_ptr<Entity> e0, std::shared_ptr<Entity> e1) {
+    PositionComponent a = *e0->getComponent<PositionComponent>();
+    PositionComponent b = *e1->getComponent<PositionComponent>();
+
+    if (a.row != b.row) {
+        return a.row < b.row; // Sort by y first
+    }
+    return a.col < b.col; // If y is the same, sort by x
+}
+
 void MovementSystem::update(EntityManager& entities, std::shared_ptr<Entity> player) {
     // set all enemy move to true
     for (auto& e : entities.getEntities()) {
@@ -23,10 +33,16 @@ void MovementSystem::update(EntityManager& entities, std::shared_ptr<Entity> pla
 
     freezeEnemies(entities, *player);
 
+    // move enemies from left to right, up to down
+    std::vector<std::shared_ptr<Entity>> enemies;
     for (auto& e : entities.getEntities()) {
         if (!e->getComponent<EnemyTypeComponent>() || !e->getComponent<MoveableComponent>()->moveable) {
             continue;
         }
+        enemies.push_back(e);
+    }
+    std::sort(enemies.begin(), enemies.end(), compare);
+    for (auto& e : enemies) {
         moveEnemy(entities, *e);
     }
 

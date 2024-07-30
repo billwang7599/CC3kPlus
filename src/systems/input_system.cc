@@ -33,7 +33,7 @@ void InputSystem::update(shared_ptr<Entity> player) {
         player->getComponent<ActionComponent>()->use = false;
     }
 
-    if (valid_direction(command)) {
+    if (validDirection(command)) {
         player->getComponent<DirectionComponent>()->direction = command;
         return;
     }

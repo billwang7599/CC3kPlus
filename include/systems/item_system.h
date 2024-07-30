@@ -10,9 +10,9 @@ class Entity;
 
 class ItemSystem
 {
-    void ItemSystem::useTreasure(EntityManager &entityManager, std::shared_ptr<Entity> player, std::shared_ptr<Entity> treasure);
-    void ItemSystem::useCompass(EntityManager &entityManager, std::shared_ptr<Entity> player, std::shared_ptr<Entity> compass);
-    void ItemSystem::useBarrierSuit(EntityManager &entityManager, std::shared_ptr<Entity> player, std::shared_ptr<Entity> barrierSuit);
+    void useTreasure(EntityManager &entityManager, std::shared_ptr<Entity> player, std::shared_ptr<Entity> treasure);
+    void useCompass(EntityManager &entityManager, std::shared_ptr<Entity> player, std::shared_ptr<Entity> compass);
+    void useBarrierSuit(EntityManager &entityManager, std::shared_ptr<Entity> player, std::shared_ptr<Entity> barrierSuit);
 
 public:
     void update(EntityManager &entityManager, std::shared_ptr<Entity> player);

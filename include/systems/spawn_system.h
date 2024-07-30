@@ -15,7 +15,7 @@ class Entity;
 class SpawnSystem
 {
     std::shared_ptr<Entity> spawnDragonAround(EntityManager &entityManager, int row, int col);
-    void moveToNextFloor(std::vector<EntityManager> &entityManagers, int &floor, std::shared_ptr<Entity> player);
+    void moveToNextFloor(std::vector<EntityManager> &entityManagers, int &floor, std::shared_ptr<Entity> &player);
 
 public:
     void readFloors(std::vector<EntityManager> &entityManagers, const std::string &filePath);
@@ -25,7 +25,7 @@ public:
     std::shared_ptr<Entity> spawnPotion(EntityManager &entityManager, int x, int y, const std::string &potionType);
     std::shared_ptr<Entity> spawnTreasure(EntityManager &entityManager, int x, int y, const int &value);
     std::shared_ptr<Entity> spawnItem(EntityManager &entityManager, int x, int y, const std::string &itemType);
-    void update(std::vector<EntityManager> &entityManagers, int &floor, std::shared_ptr<Entity> player);
+    void update(std::vector<EntityManager> &entityManagers, int &floor, std::shared_ptr<Entity> &player);
 };
 
 #endif

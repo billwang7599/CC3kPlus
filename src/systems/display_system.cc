@@ -24,10 +24,6 @@ void DisplaySystem::outputColor(char c)
 
 void DisplaySystem::update(EntityManager &entityManager, std::shared_ptr<Entity> player, int floor, std::string &action)
 {
-    if (player->getComponent<CompassComponent>())
-    {
-        std::cout << "Lol i have compass";
-    }
     for (int row = 0; row < BOARD.size(); row++)
     {
         for (int col = 0; col < BOARD.at(row).size(); col++)

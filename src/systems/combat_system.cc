@@ -11,8 +11,8 @@ void CombatSystem::battle(EntityManager& entities, shared_ptr<Entity> player, co
     const int pCol = player->getComponent<PositionComponent>()->col;
     const int pRow = player->getComponent<PositionComponent>()->row;
     shared_ptr<Entity> target;
-    vector<shared_ptr<Entity>> enemies;
 
+    // Get target
     if (direction == "no") {
         target = entities.getEntity(pCol, pRow + 1);
 
@@ -42,29 +42,52 @@ void CombatSystem::battle(EntityManager& entities, shared_ptr<Entity> player, co
     }
 
     if (!target) {
-        throw "No target there!";
+        std::cout << "No target there!" << '\n';
+    } else {
+        std::cout << "Player is attacking the enemy" << '\n';
+        attack(*player, *target);
+
+        // check if target died
+        if (checkDeath(*target)) {
+            if (target->getComponent<GoldComponent>()) {
+                player->getComponent<GoldComponent>()->gold += target->getComponent<GoldComponent>()->gold;
+            }
+            entities.removeEntity(target);
+        };
     }
 
-    cout << "Player is attacking the enemy" << '\n';
-    attack(*player, *target);
 
-    if (checkDeath(*target)) {
-        if (target->getComponent<GoldComponent>()) {
-            player->getComponent<GoldComponent>()->gold += target->getComponent<GoldComponent>()->gold;
+    enemies_attack(entities, *player);
+    std::cout << '\n';
+}
+
+void CombatSystem::enemies_attack(EntityManager& entities, Entity& player) {
+    const int pCol = player.getComponent<PositionComponent>()->col;
+    const int pRow = player.getComponent<PositionComponent>()->row;
+    vector<shared_ptr<Entity>> enemies;
+
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -1; j <= 1; j++) {
+            if (i == j && i == 0) {
+                continue;
+            }
+            enemies.push_back(entities.getEntity(pCol + i, pRow + j));
         }
-        entities.removeEntity(target);
-    };
+    }
 
-    // gang attack
-    if (target) {
+    for (auto& enemy : enemies) {
+        if (!enemy) {
+            continue;
+        }
         random_device rd;
         mt19937 gen(rd());
         uniform_int_distribution<> distrib(0, 1);
         int result = distrib(gen);
         if (result == 0) {
-            cout << "Enemy is attacking the player" << '\n';
-            attack(*target, *player);
+            std::cout << "Enemy is attacking the player" << '\n';
+            attack(*enemy, player);
         }
+        enemy->getComponent<MoveableComponent>()->moveable = false;
     }
 }
 
@@ -107,7 +130,7 @@ void CombatSystem::attack(Entity& attacker, Entity& defender) {
     }
 
     health -= damage;
-    cout << damage << " damage done!" << '\n';
+    std::cout << damage << " damage done!" << '\n';
 }
 
 void CombatSystem::goldsteal(Entity& attacker, Entity& target) {

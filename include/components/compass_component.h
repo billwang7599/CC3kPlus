@@ -4,9 +4,6 @@
 #include "component.h"
 
 class CompassComponent : public Component
-{
-public:
-    CompassComponent() {}
-};
+{};
 
 #endif // COMPASS_COMPONENT_H

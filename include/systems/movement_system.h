@@ -1,3 +1,6 @@
+#ifndef MOVEMENT_SYSTEM_H
+#define MOVEMENT_SYSTEM_H
+
 
 #include "entities/entity_manager.h"
 #include <string>
@@ -9,3 +12,4 @@ class MovementSystem {
     public:
     void update(EntityManager&, std::shared_ptr<Entity>);
 };
+#endif // MOVEMENT_SYSTEM_H

@@ -6,9 +6,24 @@
 
 void PotionSystem::usePotion(EntityManager &entityManager, std::shared_ptr<Entity> player, std::shared_ptr<Entity> potion)
 {
-    std::string &potionType = potion->getComponent<PotionTypeComponent>()->potion_type;
+    std::string potionType = potion->getComponent<PotionTypeComponent>()->potion_type;
     auto healthComponent = player->getComponent<HealthComponent>();
     auto potionEffectComponent = player->getComponent<PotionEffectComponent>();
+
+    if (player->getComponent<AllPositiveComponent>()) {
+        if (potionType == "PH")
+        {
+            potionType = "RH";
+        }
+        else if (potionType == "WA")
+        {
+            potionType = "BA";
+        }
+        else if (potionType == "WD")
+        {
+            potionType = "BD";
+        }
+    }
 
     if (potionType == "RH")
     {

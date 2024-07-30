@@ -1,3 +1,6 @@
+#ifndef POTION_SYSTEM_H
+#define POTION_SYSTEM_H
+
 #ifndef USE_SYSTEM_H
 #define USE_SYSTEM_H
 
@@ -17,3 +20,4 @@ public:
 };
 
 #endif
+#endif // POTION_SYSTEM_H

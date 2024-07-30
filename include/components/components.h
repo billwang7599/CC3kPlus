@@ -24,5 +24,8 @@
 #include "components/treasure_component.h"
 #include "components/action_component.h"
 #include "components/direction_component.h"
+#include "components/gold_multiplier_component.h"
+#include "components/all_positive_component.h"
+#include "components/guarding_position_component.h"
 
 #endif // COMPONENTS_H

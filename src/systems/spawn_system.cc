@@ -23,7 +23,7 @@ void SpawnSystem::spawnDragonAround(EntityManager &entityManager, int row, int c
         {
             continue;
         }
-        spawnEnemy(entityManager, dragonPos.first, dragonPos.second, "dragon");
+        spawnEnemy(entityManager, dragonPos.first, dragonPos.second, "dragon", false);
         // get dragon and give it Guarding Position component
         entityManager.getEntity(dragonPos.first, dragonPos.second)->addComponent(std::make_shared<GuardingPositionComponent>(row, col));
         return;

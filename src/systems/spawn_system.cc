@@ -29,7 +29,7 @@ std::shared_ptr<Entity> SpawnSystem::spawnDragonAround(EntityManager &entityMana
     }
 }
 
-void SpawnSystem::moveToNextFloor(std::vector<EntityManager> &entityManagers, int &floor, std::shared_ptr<Entity> player)
+void SpawnSystem::moveToNextFloor(std::vector<EntityManager> &entityManagers, int &floor, std::shared_ptr<Entity> prevPlayer)
 {
     // Increase floor and move player attributes to next floor
     floor++;
@@ -43,17 +43,17 @@ void SpawnSystem::moveToNextFloor(std::vector<EntityManager> &entityManagers, in
     EntityManager &prevEntityManager = entityManagers.at(floor - 1);
     EntityManager &currEntityManager = entityManagers.at(floor);
 
-    std::shared_ptr<Entity> prevPlayer;
+    // std::shared_ptr<Entity> prevPlayer;
     std::shared_ptr<Entity> currPlayer;
 
-    for (auto &entity : prevEntityManager.getEntities())
-    {
-        if (entity->getComponent<PlayerRaceComponent>())
-        {
-            prevPlayer = entity;
-            break;
-        }
-    }
+    // for (auto &entity : prevEntityManager.getEntities())
+    // {
+    //     if (entity->getComponent<PlayerRaceComponent>())
+    //     {
+    //         prevPlayer = entity;
+    //         break;
+    //     }
+    // }
     for (auto &entity : currEntityManager.getEntities())
     {
         if (entity->getComponent<PlayerRaceComponent>())
@@ -62,14 +62,19 @@ void SpawnSystem::moveToNextFloor(std::vector<EntityManager> &entityManagers, in
             break;
         }
     }
+    std::swap(*currPlayer, *prevPlayer);
+    // currPlayer->removeComponent<CompassComponent>();
+    // std::swap(*currPlayer->getComponent<PositionComponent>(), *prevPlayer->getComponent<PositionComponent>());
+    //  Move player attributes to next floor
+    //  currPlayer->getComponent<HealthComponent>()->currentHealth = prevPlayer->getComponent<HealthComponent>()->currentHealth;
+    //  currPlayer->getComponent<GoldComponent>()->gold = prevPlayer->getComponent<GoldComponent>()->gold;
+    //  if (prevPlayer->getComponent<BarrierSuitComponent>())
+    //  {
+    //      currPlayer->addComponent(std::make_shared<BarrierSuitComponent>());
+    //  }
 
-    // Move player attributes to next floor
-    currPlayer->getComponent<HealthComponent>()->currentHealth = prevPlayer->getComponent<HealthComponent>()->currentHealth;
-    currPlayer->getComponent<GoldComponent>()->gold = prevPlayer->getComponent<GoldComponent>()->gold;
-    if (prevPlayer->getComponent<BarrierSuitComponent>())
-    {
-        currPlayer->addComponent(std::make_shared<BarrierSuitComponent>());
-    }
+    // player = std::make_shared<Entity>(*currPlayer);
+    // player->removeComponent<CompassComponent>();
 }
 
 void SpawnSystem::readFloors(std::vector<EntityManager> &entityManagers, const std::string &filePath)

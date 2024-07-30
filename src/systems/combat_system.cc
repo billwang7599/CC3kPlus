@@ -47,7 +47,8 @@ void CombatSystem::battle(EntityManager &entities, shared_ptr<Entity> player, co
             if (target->getComponent<GoldComponent>())
             {
                 int gold = target->getComponent<GoldComponent>()->gold;
-                if (player->getComponent<GoldMultiplierComponent>()) {
+                if (player->getComponent<GoldMultiplierComponent>())
+                {
                     gold *= player->getComponent<GoldMultiplierComponent>()->percent;
                 }
                 player->getComponent<GoldComponent>()->gold += gold;
@@ -55,7 +56,6 @@ void CombatSystem::battle(EntityManager &entities, shared_ptr<Entity> player, co
             if (target->getComponent<CompassComponent>())
             {
                 player->addComponent(std::make_shared<CompassComponent>());
-                std::cout << "Enemy slain had compass" << '\n';
             };
             entities.removeEntity(target);
         };

@@ -76,9 +76,9 @@ int main(int argc, char *argv[])
             inputSystem.update(player);
             potionSystem.update(entityManagers[floor], player);
             itemSystem.update(entityManagers[floor], player);
+            spawnSystem.update(entityManagers, floor, player);
             movementSystem.update(entityManagers[floor], player);
             combatSystem.update(entityManagers[floor], player);
-            spawnSystem.update(entityManagers, floor, player);
             displaySystem.update(entityManagers[floor], player, floor, actionMessage);
         }
         catch (std::string e)

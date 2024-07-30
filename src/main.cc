@@ -7,6 +7,7 @@
 #include "systems/spawn_system.h"
 #include "systems/display_system.h"
 #include "systems/input_system.h"
+#include "systems/movement_system.h"
 #include "constants/constants.h"
 
 int main(int argc, char *argv[])
@@ -30,6 +31,7 @@ int main(int argc, char *argv[])
     CombatSystem combatSystem;
     DisplaySystem displaySystem;
     InputSystem inputSystem;
+    MovementSystem movementSystem;
 
     // Setup
     std::vector<EntityManager> entityManagers(NUM_FLOORS);
@@ -62,7 +64,9 @@ int main(int argc, char *argv[])
     {
         try
         {
+            // the order matters
             inputSystem.update(player);
+            movementSystem.update(entityManagers[floor], player);
             combatSystem.update(entityManagers[floor], player);
         }
         catch (std::string e)
@@ -72,6 +76,8 @@ int main(int argc, char *argv[])
         catch (char const *e)
         {
             std::cout << e << '\n';
+        } catch (exception& e) {
+            std::cout << "Exception: " << e.what() << '\n';
         }
         displaySystem.update(entityManagers[floor]);
     }

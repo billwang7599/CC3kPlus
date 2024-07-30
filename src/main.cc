@@ -24,6 +24,23 @@ int main(int argc, char *argv[])
         combat.battle(entitites, player, "ea");
         combat.battle(entitites, player, "ea");
         combat.battle(entitites, player, "ea");
+        combat.battle(entitites, player, "ea");
+        combat.battle(entitites, player, "ea");
+        combat.battle(entitites, player, "ea");
+        combat.battle(entitites, player, "ea");
+        combat.battle(entitites, player, "ea");
+        combat.battle(entitites, player, "ea");
+        combat.battle(entitites, player, "ea");
+        combat.battle(entitites, player, "ea");
+        combat.battle(entitites, player, "ea");
+        combat.battle(entitites, player, "ea");
+        combat.battle(entitites, player, "ea");
+        combat.battle(entitites, player, "ea");
+        combat.battle(entitites, player, "ea");
+        combat.battle(entitites, player, "ea");
+        combat.battle(entitites, player, "ea");
+        combat.battle(entitites, player, "ea");
+        combat.battle(entitites, player, "ea");
     } catch (char const* e) {
         cout << e << '\n';
     }

@@ -17,7 +17,7 @@ class CombatSystem {
 
     public:
     void battle(EntityManager&, shared_ptr<Entity>, const string&);
-    // void enemy_attack(const EntityManager&);  -- make an AI/enemy system
+    // void enemy_attack(const EntityManager&);  -- make an AI/enemy system // make
 };
 
 #endif

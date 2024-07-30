@@ -16,6 +16,9 @@
 void reset(std::vector<EntityManager> &entityManagers, SpawnSystem &spawnSystem, int &seed, std::string &filePath, int &floor)
 {
     floor = 0;
+    seenPotions.clear();
+    actionMessage.clear();
+    actionMessage.push_back("Player has spawned!");
     for (int i = 0; i < NUM_FLOORS; i++)
     {
         EntityManager &entityManager = entityManagers.at(i);

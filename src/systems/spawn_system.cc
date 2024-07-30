@@ -165,25 +165,25 @@ void SpawnSystem::spawnPlayer(EntityManager &entityManager, int x, int y, const 
 
     if (race == "human")
     {
-        player->addComponent(std::make_shared<HealthComponent>(140, 140));
+        player->addComponent(std::make_shared<HealthComponent>(140));
         player->addComponent(std::make_shared<AttackComponent>(20));
         player->addComponent(std::make_shared<DefenseComponent>(20));
     }
     else if (race == "dwarf")
     {
-        player->addComponent(std::make_shared<HealthComponent>(100, 100));
+        player->addComponent(std::make_shared<HealthComponent>(100));
         player->addComponent(std::make_shared<AttackComponent>(20));
         player->addComponent(std::make_shared<DefenseComponent>(30));
     }
     else if (race == "elf")
     {
-        player->addComponent(std::make_shared<HealthComponent>(140, 140));
+        player->addComponent(std::make_shared<HealthComponent>(140));
         player->addComponent(std::make_shared<AttackComponent>(30));
         player->addComponent(std::make_shared<DefenseComponent>(10));
     }
     else if (race == "orc")
     {
-        player->addComponent(std::make_shared<HealthComponent>(180, 180));
+        player->addComponent(std::make_shared<HealthComponent>(180));
         player->addComponent(std::make_shared<AttackComponent>(30));
         player->addComponent(std::make_shared<DefenseComponent>(25));
     }
@@ -196,73 +196,70 @@ void SpawnSystem::spawnPlayer(EntityManager &entityManager, int x, int y, const 
 
 void SpawnSystem::spawnEnemy(EntityManager &entityManager, int x, int y, const std::string &enemyType)
 {
-    // Refactor to move all common components out
     auto enemy = entityManager.createEntity();
     if (enemyType == "vampire")
     {
         enemy->addComponent(std::make_shared<DisplayComponent>('V'));
-        enemy->addComponent(std::make_shared<HealthComponent>(50, 50));
+        enemy->addComponent(std::make_shared<HealthComponent>(50));
         enemy->addComponent(std::make_shared<AttackComponent>(25));
         enemy->addComponent(std::make_shared<DefenseComponent>(25));
-        enemy->addComponent(std::make_shared<HostileComponent>(true));
+        enemy->addComponent(std::make_shared<HostileComponent>());
         enemy->addComponent(std::make_shared<GoldComponent>(1));
     }
     else if (enemyType == "werewolf")
     {
         enemy->addComponent(std::make_shared<DisplayComponent>('W'));
-        enemy->addComponent(std::make_shared<HealthComponent>(120, 120));
+        enemy->addComponent(std::make_shared<HealthComponent>(120));
         enemy->addComponent(std::make_shared<AttackComponent>(30));
         enemy->addComponent(std::make_shared<DefenseComponent>(5));
         enemy->addComponent(std::make_shared<GoldComponent>(1));
-        enemy->addComponent(std::make_shared<HostileComponent>(true));
+        enemy->addComponent(std::make_shared<HostileComponent>());
     }
     else if (enemyType == "troll")
     {
         enemy->addComponent(std::make_shared<DisplayComponent>('T'));
-        enemy->addComponent(std::make_shared<HealthComponent>(120, 120));
+        enemy->addComponent(std::make_shared<HealthComponent>(120));
         enemy->addComponent(std::make_shared<AttackComponent>(25));
         enemy->addComponent(std::make_shared<DefenseComponent>(15));
-        enemy->addComponent(std::make_shared<HostileComponent>(true));
+        enemy->addComponent(std::make_shared<HostileComponent>());
         enemy->addComponent(std::make_shared<GoldComponent>(1));
     }
     else if (enemyType == "goblin")
     {
         enemy->addComponent(std::make_shared<DisplayComponent>('N'));
-        enemy->addComponent(std::make_shared<HealthComponent>(70, 70));
+        enemy->addComponent(std::make_shared<HealthComponent>(70));
         enemy->addComponent(std::make_shared<AttackComponent>(5));
         enemy->addComponent(std::make_shared<DefenseComponent>(10));
-        enemy->addComponent(std::make_shared<HostileComponent>(true));
+        enemy->addComponent(std::make_shared<HostileComponent>());
         enemy->addComponent(std::make_shared<GoldComponent>(1));
     }
     else if (enemyType == "merchant")
     {
         enemy->addComponent(std::make_shared<DisplayComponent>('M'));
-        enemy->addComponent(std::make_shared<HealthComponent>(30, 30));
+        enemy->addComponent(std::make_shared<HealthComponent>(30));
         enemy->addComponent(std::make_shared<AttackComponent>(70));
         enemy->addComponent(std::make_shared<DefenseComponent>(5));
-        enemy->addComponent(std::make_shared<HostileComponent>(false));
         enemy->addComponent(std::make_shared<GoldComponent>(0));
     }
     else if (enemyType == "dragon")
     {
         enemy->addComponent(std::make_shared<DisplayComponent>('D'));
-        enemy->addComponent(std::make_shared<HealthComponent>(150, 150));
+        enemy->addComponent(std::make_shared<HealthComponent>(150));
         enemy->addComponent(std::make_shared<AttackComponent>(20));
         enemy->addComponent(std::make_shared<DefenseComponent>(20));
-        enemy->addComponent(std::make_shared<HostileComponent>(true));
+        enemy->addComponent(std::make_shared<HostileComponent>());
         enemy->addComponent(std::make_shared<GoldComponent>(0));
     }
     else if (enemyType == "phoenix")
     {
         enemy->addComponent(std::make_shared<DisplayComponent>('P'));
-        enemy->addComponent(std::make_shared<HealthComponent>(50, 50));
+        enemy->addComponent(std::make_shared<HealthComponent>(50));
         enemy->addComponent(std::make_shared<AttackComponent>(35));
         enemy->addComponent(std::make_shared<DefenseComponent>(20));
-        enemy->addComponent(std::make_shared<HostileComponent>(true));
+        enemy->addComponent(std::make_shared<HostileComponent>());
         enemy->addComponent(std::make_shared<GoldComponent>(1));
     }
     // Add more enemy types as needed
-    enemy->addComponent(std::make_shared<EnemyHasCompassComponent>(false));
     enemy->addComponent(std::make_shared<MoveableComponent>(true));
     enemy->addComponent(std::make_shared<EnemyTypeComponent>(enemyType));
     enemy->addComponent(std::make_shared<PositionComponent>(x, y));
@@ -276,7 +273,7 @@ void SpawnSystem::spawnPotion(EntityManager &entityManager, int x, int y, const 
     potion->addComponent(std::make_shared<PositionComponent>(x, y));
     potion->addComponent(std::make_shared<DisplayComponent>('P'));
     potion->addComponent(std::make_shared<PotionTypeComponent>(potionType));
-    potion->addComponent(std::make_shared<CanPickupComponent>(true));
+    potion->addComponent(std::make_shared<CanPickupComponent>());
 }
 
 void SpawnSystem::spawnTreasure(EntityManager &entityManager, int x, int y, const int &value)
@@ -289,11 +286,11 @@ void SpawnSystem::spawnTreasure(EntityManager &entityManager, int x, int y, cons
 
     if (value == 6) // Dragon hoard
     {
-        treasure->addComponent(std::make_shared<CanPickupComponent>(false));
+        // cannot pick up
     }
     else
     {
-        treasure->addComponent(std::make_shared<CanPickupComponent>(true));
+        treasure->addComponent(std::make_shared<CanPickupComponent>());
     }
 }
 
@@ -305,19 +302,17 @@ void SpawnSystem::spawnItem(EntityManager &entityManager, int x, int y, const st
     if (itemType == "compass")
     {
         item->addComponent(std::make_shared<DisplayComponent>('C'));
-        item->addComponent(std::make_shared<CanPickupComponent>(true));
+        item->addComponent(std::make_shared<CanPickupComponent>());
         item->addComponent(std::make_shared<CompassComponent>());
     }
     else if (itemType == "barrier_suit")
     {
         item->addComponent(std::make_shared<DisplayComponent>('B'));
-        item->addComponent(std::make_shared<CanPickupComponent>(false));
         item->addComponent(std::make_shared<BarrierSuitComponent>());
     }
     else if (itemType == "stairs")
     {
         item->addComponent(std::make_shared<DisplayComponent>('\\'));
-        item->addComponent(std::make_shared<CanPickupComponent>(false));
         item->addComponent(std::make_shared<StairsComponent>(false));
     }
 

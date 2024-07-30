@@ -1,5 +1,9 @@
 #include "constants/constants.h"
 
+const int NUM_FLOORS = 5;
+const int FLOOR_HEIGHT = 25;
+const int FLOOR_WIDTH = 79;
+
 const std::vector<std::string> BOARD = {
     "|-----------------------------------------------------------------------------|",
     "|                                                                             |",

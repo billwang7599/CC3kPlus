@@ -5,7 +5,7 @@
 
 using namespace std;
 
-bool InputSystem::valid_direction(std::string command) {
+bool InputSystem::validDirection(std::string command) {
     return find(valid_directions.begin(), valid_directions.end(), command) != valid_directions.end();
 }
 

@@ -8,7 +8,7 @@
 
 class InputSystem {
     std::vector<std::string> valid_directions = {"no","so","ea","we","ne","nw","se","sw"};
-    bool valid_direction(std::string);
+    bool validDirection(std::string);
     public:
     void update(std::shared_ptr<Entity>);
 };

@@ -7,12 +7,17 @@
 #include <cstdlib>
 #include <algorithm>
 #include <utility>
+#include <fstream>
+#include <iostream>
 
 class EntityManager;
 class SpawnSystem
 {
+    void spawnDragonAround(EntityManager &entityManager, int row, int col);
+
 public:
-    void newFloor(EntityManager &entityManager, const int seed);
+    void readFloors(std::vector<EntityManager> &entityManagers, const std::string &filePath);
+    void newFloor(EntityManager &entityManager, const int seed, bool spawn_barrier_suit);
     void spawnPlayer(EntityManager &entityManager, int x, int y, const std::string &race);
     void spawnEnemy(EntityManager &entityManager, int x, int y, const std::string &enemyType);
     void spawnPotion(EntityManager &entityManager, int x, int y, const std::string &potionType);

@@ -3,7 +3,137 @@
 #include "entities/entity.h"
 #include "constants/constants.h"
 
-void SpawnSystem::newFloor(EntityManager &entityManager, const int seed = 10000)
+void SpawnSystem::spawnDragonAround(EntityManager &entityManager, int row, int col)
+{
+    for (int i = -1; i <= 1; i++)
+    {
+        for (int j = -1; j <= 1; j++)
+        {
+            if (i == 0 && j == 0)
+            {
+                continue;
+            }
+            std::pair<int, int> dragonPos = std::make_pair(row + i, col + j);
+
+            if (entityManager.getEntity(dragonPos.first, dragonPos.second))
+            {
+                continue;
+            }
+            if (BOARD[dragonPos.first][dragonPos.second] != '.') // if dragonPos is not a floor tile
+            {
+                continue;
+            }
+            spawnEnemy(entityManager, dragonPos.first, dragonPos.second, "dragon");
+            return;
+        }
+    }
+}
+
+void SpawnSystem::readFloors(std::vector<EntityManager> &entityManagers, const std::string &filePath)
+{
+    std::ifstream file(filePath);
+    std::string line;
+
+    for (int floor = 0; floor < NUM_FLOORS; floor++)
+    {
+        EntityManager &entityManager = entityManagers.at(floor);
+
+        for (int row = 0; row < FLOOR_HEIGHT; row++)
+        {
+            std::getline(file, line);
+            for (int col = 0; col < 79; col++)
+            {
+                char tile = line[col];
+                if (tile == '@')
+                {
+                    spawnPlayer(entityManager, row, col, "human");
+                }
+                else if (tile == 'V')
+                {
+                    spawnEnemy(entityManager, row, col, "vampire");
+                }
+                else if (tile == 'W')
+                {
+                    spawnEnemy(entityManager, row, col, "werewolf");
+                }
+                else if (tile == 'N')
+                {
+                    spawnEnemy(entityManager, row, col, "goblin");
+                }
+                else if (tile == 'M')
+                {
+                    spawnEnemy(entityManager, row, col, "merchant");
+                }
+                else if (tile == 'D')
+                {
+                    spawnEnemy(entityManager, row, col, "dragon");
+                }
+                else if (tile == 'X')
+                {
+                    spawnEnemy(entityManager, row, col, "phoenix");
+                }
+                else if (tile == 'T')
+                {
+                    spawnEnemy(entityManager, row, col, "troll");
+                }
+                else if (tile == '0')
+                {
+                    spawnPotion(entityManager, row, col, "RH");
+                }
+                else if (tile == '1')
+                {
+                    spawnPotion(entityManager, row, col, "BA");
+                }
+                else if (tile == '2')
+                {
+                    spawnPotion(entityManager, row, col, "BD");
+                }
+                else if (tile == '3')
+                {
+                    spawnPotion(entityManager, row, col, "PH");
+                }
+                else if (tile == '4')
+                {
+                    spawnPotion(entityManager, row, col, "WA");
+                }
+                else if (tile == '5')
+                {
+                    spawnPotion(entityManager, row, col, "WD");
+                }
+                else if (tile == '6')
+                {
+                    spawnTreasure(entityManager, row, col, 1);
+                }
+                else if (tile == '7')
+                {
+                    spawnTreasure(entityManager, row, col, 2);
+                }
+                else if (tile == '8')
+                {
+                    spawnTreasure(entityManager, row, col, 4);
+                }
+                else if (tile == '9')
+                {
+                    spawnTreasure(entityManager, row, col, 6);
+                }
+                else if (tile == 'B')
+                {
+                    spawnItem(entityManager, row, col, "barrier_suit");
+                }
+                else if (tile == 'C')
+                {
+                    spawnItem(entityManager, row, col, "compass");
+                }
+                else if (tile == '\\')
+                {
+                    spawnItem(entityManager, row, col, "stairs");
+                }
+            }
+        }
+    }
+}
+
+void SpawnSystem::newFloor(EntityManager &entityManager, const int seed, bool spawn_barrier_suit)
 {
     // Seed random number generator
     std::srand(seed);
@@ -23,8 +153,16 @@ void SpawnSystem::newFloor(EntityManager &entityManager, const int seed = 10000)
     // Spawn player in random room
     int playerRoom = std::rand() % 5;
     std::pair<int, int> playerPos = ROOMS[playerRoom][std::rand() % ROOMS[playerRoom].size()];
-    player->getComponent<PositionComponent>()->row = playerPos.first;
-    player->getComponent<PositionComponent>()->col = playerPos.second;
+
+    if (player)
+    {
+        player->getComponent<PositionComponent>()->row = playerPos.first;
+        player->getComponent<PositionComponent>()->col = playerPos.second;
+    }
+    else
+    {
+        spawnPlayer(entityManager, playerPos.first, playerPos.second, "human");
+    }
 
     // Spawn stairs in random room
     int stairsRoom = std::rand() % 5;
@@ -54,9 +192,18 @@ void SpawnSystem::newFloor(EntityManager &entityManager, const int seed = 10000)
         potionsToSpawn--;
     }
 
+    int enemiesToSpawn = 20; // if a dragon is spawned, decrement
+    if (spawn_barrier_suit)
+    {
+        int barrierSuitRoom = std::rand() % 5;
+        std::pair<int, int> barrierSuitPos = ROOMS[barrierSuitRoom][std::rand() % ROOMS[barrierSuitRoom].size()];
+        spawnItem(entityManager, barrierSuitPos.first, barrierSuitPos.second, "barrier_suit");
+        spawnDragonAround(entityManager, barrierSuitPos.first, barrierSuitPos.second);
+        enemiesToSpawn--;
+    }
+
     // Spawn 10 treasures
     int treasureToSpawn = 10;
-    int enemiesToSpawn = 20; // if a dragon is spawned, decrement
     while (treasureToSpawn > 0)
     {
         int treasureRoom = std::rand() % 5;
@@ -88,29 +235,8 @@ void SpawnSystem::newFloor(EntityManager &entityManager, const int seed = 10000)
         spawnTreasure(entityManager, treasurePos.first, treasurePos.second, treasureValue);
         if (treasureValue == 6) // Spawn dragon
         {
-            for (int i = -1; i <= 1; i++)
-            {
-                for (int j = -1; j <= 1; j++)
-                {
-                    if (i == 0 && j == 0)
-                    {
-                        continue;
-                    }
-                    std::pair<int, int> dragonPos = std::make_pair(treasurePos.first + i, treasurePos.second + j);
-
-                    if (entityManager.getEntity(dragonPos.first, dragonPos.second))
-                    {
-                        continue;
-                    }
-                    if (BOARD[dragonPos.first][dragonPos.second] != '.') // if dragonPos is not a floor tile
-                    {
-                        continue;
-                    }
-                    spawnEnemy(entityManager, treasurePos.first + i, treasurePos.second + j, "dragon");
-                    enemiesToSpawn--;
-                    break;
-                }
-            }
+            spawnDragonAround(entityManager, treasurePos.first, treasurePos.second);
+            enemiesToSpawn--;
         };
         treasureToSpawn--;
     }
@@ -254,7 +380,8 @@ void SpawnSystem::spawnEnemy(EntityManager &entityManager, int x, int y, const s
     }
     else if (enemyType == "phoenix")
     {
-        enemy->addComponent(std::make_shared<DisplayComponent>('P'));
+        enemy->addComponent(std::make_shared<DisplayComponent>('X'));
+        enemy->addComponent(std::make_shared<HealthComponent>(50));
         enemy->addComponent(std::make_shared<HealthComponent>(50));
         enemy->addComponent(std::make_shared<AttackComponent>(35));
         enemy->addComponent(std::make_shared<DefenseComponent>(20));
@@ -317,6 +444,4 @@ void SpawnSystem::spawnItem(EntityManager &entityManager, int x, int y, const st
         item->addComponent(std::make_shared<DisplayComponent>('\\'));
         item->addComponent(std::make_shared<StairsComponent>(false));
     }
-
-    // Add more item types as needed
 }

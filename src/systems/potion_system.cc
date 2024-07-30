@@ -2,6 +2,7 @@
 #include "entities/entity_manager.h"
 #include "entities/entity.h"
 #include "components/components.h"
+#include "globals/global.h"
 #include "constants/constants.h"
 
 void PotionSystem::usePotion(EntityManager &entityManager, std::shared_ptr<Entity> player, std::shared_ptr<Entity> potion)
@@ -9,6 +10,8 @@ void PotionSystem::usePotion(EntityManager &entityManager, std::shared_ptr<Entit
     std::string potionType = potion->getComponent<PotionTypeComponent>()->potion_type;
     auto healthComponent = player->getComponent<HealthComponent>();
     auto potionEffectComponent = player->getComponent<PotionEffectComponent>();
+    seenPotions.push_back(potionType);
+    actionMessage.push_back("PC uses " + potionType + ".");
 
     if (player->getComponent<AllPositiveComponent>()) {
         if (potionType == "PH")

@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <iostream>
 #include <cmath>
+#include "globals/global.h"
 
 bool compare(std::shared_ptr<Entity> e0, std::shared_ptr<Entity> e1) {
     PositionComponent a = *e0->getComponent<PositionComponent>();
@@ -33,6 +34,36 @@ void MovementSystem::update(EntityManager& entities, std::shared_ptr<Entity> pla
         {
             throw "Cannot move there!";
         };
+
+        // check for potions
+        const int pCol = player->getComponent<PositionComponent>()->col;
+        const int pRow = player->getComponent<PositionComponent>()->row;
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++)
+            {
+                if (i == j && i == 0)
+                {
+                    continue;
+                }
+
+                std::shared_ptr<Entity> e = entities.getEntity(pRow + i, pCol + j);
+                if (!e || !e->getComponent<PotionTypeComponent>()) {
+                    continue;
+                }
+                if (std::find(seenPotions.begin(), seenPotions.end(), e->getComponent<PotionTypeComponent>()->potion_type) != seenPotions.end()) {
+                    // already seen
+                    actionMessage.push_back("PC moves " + player->getComponent<DirectionComponent>()->direction +
+                        " and sees a " + e->getComponent<PotionTypeComponent>()->potion_type + " potion.");
+                } else {
+                    actionMessage.push_back(
+                        "PC moves " + player->getComponent<DirectionComponent>()->direction +
+                        " and sees an unkown potion.");
+                }
+            }
+        }
+        if (actionMessage.size() == 0) {
+            actionMessage.push_back("PC moves " + player->getComponent<DirectionComponent>()->direction + ".");
+        }
     }
 
     freezeEnemies(entities, *player);

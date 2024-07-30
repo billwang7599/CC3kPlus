@@ -106,12 +106,12 @@ void MovementSystem::freezeEnemies(EntityManager &entities, Entity &player)
 
 void MovementSystem::moveEnemy(EntityManager &entities, Entity &enemy)
 {
-    auto it = directions.begin();
+    auto it = DIRECTION_MAP.begin();
     std::advance(it, std::rand() % 8);
     std::string direction = it->first;
     while (!moveEntity(entities, enemy, direction))
     {
-        it = directions.begin();
+        it = DIRECTION_MAP.begin();
         advance(it, std::rand() % 8);
         direction = it->first;
     };
@@ -120,8 +120,8 @@ void MovementSystem::moveEnemy(EntityManager &entities, Entity &enemy)
 bool MovementSystem::moveEntity(EntityManager &entities, Entity &e, std::string &direction)
 {
     // check map and entities
-    int newRow = e.getComponent<PositionComponent>()->row + directions.at(direction).first;
-    int newCol = e.getComponent<PositionComponent>()->col + directions.at(direction).second;
+    int newRow = e.getComponent<PositionComponent>()->row + DIRECTION_MAP.at(direction).first;
+    int newCol = e.getComponent<PositionComponent>()->col + DIRECTION_MAP.at(direction).second;
     if (entities.getEntity(newRow, newCol) || BOARD[newRow][newCol] == '|' || BOARD[newRow][newCol] == '-' || BOARD[newRow][newCol] == ' ')
     {
         return false;

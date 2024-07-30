@@ -6,8 +6,6 @@
 class StairsComponent : public Component
 {
 public:
-    bool visible;
-    StairsComponent(bool visible) : visible{visible} {};
 };
 
 #endif // STAIRS_COMPONENT_H

@@ -15,9 +15,10 @@ class CombatSystem {
     void attack(Entity&, Entity&);
     bool checkDeath(Entity&);
     void enemies_attack(EntityManager&, Entity&);
+    void battle(EntityManager&, shared_ptr<Entity>, const string&);
 
     public:
-    void battle(EntityManager&, shared_ptr<Entity>, const string&);
+    void update(EntityManager&, shared_ptr<Entity>);
 };
 
 #endif

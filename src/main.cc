@@ -6,12 +6,15 @@
 #include "systems/combat_system.h"
 #include "systems/spawn_system.h"
 #include "systems/display_system.h"
+#include "systems/input_system.h"
 #include "constants/constants.h"
 
 int main(int argc, char *argv[])
 {
+    int floor = 0;
+    bool gameLoop = true;
     std::string filePath;
-    int seed = 10000;
+    int seed = 123;
 
     if (argc > 1)
     {
@@ -26,6 +29,7 @@ int main(int argc, char *argv[])
     SpawnSystem spawnSystem;
     CombatSystem combatSystem;
     DisplaySystem displaySystem;
+    InputSystem inputSystem;
 
     std::vector<EntityManager> entityManagers(NUM_FLOORS);
     if (!filePath.empty())
@@ -39,8 +43,26 @@ int main(int argc, char *argv[])
         {
             EntityManager &entityManager = entityManagers.at(i);
             spawnSystem.newFloor(entityManager, seed * (i + i), i == barrier_suit_floor);
-            displaySystem.update(entityManager);
+            // displaySystem.update(entityManager); // prints out floor
         }
+    }
+    shared_ptr<Entity> player;
+    for (auto e : entityManagers[floor].getEntities()) {
+        if (e->getComponent<PlayerRaceComponent>()) {
+            player = e;
+            break;
+        }
+    }
+    while (gameLoop) {
+        try {
+            inputSystem.update(player);
+            combatSystem.update(entityManagers[floor], player);
+        } catch (std::string e) {
+            std::cout << e << '\n';
+        } catch (char const* e) {
+            std::cout << e << '\n';
+        }
+        displaySystem.update(entityManagers[floor]);
     }
 
     return 0;

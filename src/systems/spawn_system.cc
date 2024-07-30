@@ -64,7 +64,7 @@ void SpawnSystem::moveToNextFloor(std::vector<EntityManager> &entityManagers, in
     prevPlayer = currPlayer;
 }
 
-void SpawnSystem::readFloors(std::vector<EntityManager> &entityManagers, const std::string &filePath)
+void SpawnSystem::readFloors(std::vector<EntityManager> &entityManagers, const std::string &filePath, const std::string &race)
 {
     std::ifstream file(filePath);
     std::string line;
@@ -82,7 +82,7 @@ void SpawnSystem::readFloors(std::vector<EntityManager> &entityManagers, const s
                 char tile = line[col];
                 if (tile == '@')
                 {
-                    spawnPlayer(entityManager, row, col, "human");
+                    spawnPlayer(entityManager, row, col, race);
                 }
                 else if (tile == 'V')
                 {
@@ -179,7 +179,7 @@ void SpawnSystem::readFloors(std::vector<EntityManager> &entityManagers, const s
     }
 }
 
-void SpawnSystem::newFloor(EntityManager &entityManager, const int seed, bool spawnBarrierSuit)
+void SpawnSystem::newFloor(EntityManager &entityManager, const int seed, bool spawnBarrierSuit, const std::string &race)
 {
     // Seed random number generator
     std::srand(seed);
@@ -207,7 +207,7 @@ void SpawnSystem::newFloor(EntityManager &entityManager, const int seed, bool sp
     }
     else
     {
-        spawnPlayer(entityManager, playerPos.first, playerPos.second, "human");
+        spawnPlayer(entityManager, playerPos.first, playerPos.second, race);
     }
 
     // Spawn stairs in random room

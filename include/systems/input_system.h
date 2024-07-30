@@ -6,11 +6,13 @@
 #include <vector>
 #include <string>
 
-class InputSystem {
-    std::vector<std::string> valid_directions = {"no","so","ea","we","ne","nw","se","sw"};
+class InputSystem
+{
+    std::vector<std::string> valid_directions = {"no", "so", "ea", "we", "ne", "nw", "se", "sw"};
     bool validDirection(std::string);
-    public:
-    void update(std::shared_ptr<Entity>);
+
+public:
+    void update(std::string &, std::shared_ptr<Entity>);
 };
 
 #endif

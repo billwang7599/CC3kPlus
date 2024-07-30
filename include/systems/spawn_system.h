@@ -18,8 +18,8 @@ class SpawnSystem
     void moveToNextFloor(std::vector<EntityManager> &entityManagers, int &floor, std::shared_ptr<Entity> &player);
 
 public:
-    void readFloors(std::vector<EntityManager> &entityManagers, const std::string &filePath);
-    void newFloor(EntityManager &entityManager, const int seed, bool spawn_barrier_suit);
+    void readFloors(std::vector<EntityManager> &entityManagers, const std::string &filePath, const std::string &race);
+    void newFloor(EntityManager &entityManager, const int seed, bool spawn_barrier_suit, const std::string &race);
     std::shared_ptr<Entity> spawnPlayer(EntityManager &entityManager, int x, int y, const std::string &race);
     std::shared_ptr<Entity> spawnEnemy(EntityManager &entityManager, int x, int y, const std::string &enemyType, bool withCompass);
     std::shared_ptr<Entity> spawnPotion(EntityManager &entityManager, int x, int y, const std::string &potionType);

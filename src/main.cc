@@ -12,9 +12,41 @@
 #include "systems/item_system.h"
 #include "constants/constants.h"
 
+void reset(std::vector<EntityManager> &entityManagers, SpawnSystem &spawnSystem, int &seed, std::string &filePath, int &floor)
+{
+    floor = 0;
+    for (int i = 0; i < NUM_FLOORS; i++)
+    {
+        EntityManager &entityManager = entityManagers.at(i);
+        entityManager.getEntities().clear();
+    }
+
+    std::cout << "What race would you like to play as? (human | dwarf | elf | orc)" << std::endl;
+    std::string race;
+    std::cin >> race;
+    while (race != "human" && race != "dwarf" && race != "elf" && race != "orc")
+    {
+        std::cout << "Invalid race. Try again." << std::endl;
+        std::cin >> race;
+    }
+
+    if (!filePath.empty())
+    {
+        spawnSystem.readFloors(entityManagers, filePath, race);
+    }
+    else
+    {
+        int barrier_suit_floor = std::rand() % 5;
+        for (int i = 0; i < NUM_FLOORS; i++)
+        {
+            EntityManager &entityManager = entityManagers.at(i);
+            spawnSystem.newFloor(entityManager, seed * (i + i), i == barrier_suit_floor, race);
+        }
+    }
+}
+
 int main(int argc, char *argv[])
 {
-    int floor = 0;
     bool gameLoop = true;
     std::string filePath;
     int seed = 2123;
@@ -39,20 +71,9 @@ int main(int argc, char *argv[])
     MovementSystem movementSystem;
 
     // Setup
+    int floor = 0;
     std::vector<EntityManager> entityManagers(NUM_FLOORS);
-    if (!filePath.empty())
-    {
-        spawnSystem.readFloors(entityManagers, filePath);
-    }
-    else
-    {
-        int barrier_suit_floor = std::rand() % 5;
-        for (int i = 0; i < NUM_FLOORS; i++)
-        {
-            EntityManager &entityManager = entityManagers.at(i);
-            spawnSystem.newFloor(entityManager, seed * (i + i), i == barrier_suit_floor);
-        }
-    }
+    reset(entityManagers, spawnSystem, seed, filePath, floor);
 
     // Game
     shared_ptr<Entity> player;
@@ -70,10 +91,36 @@ int main(int argc, char *argv[])
 
     while (gameLoop)
     {
+        string input, command;
+        std::getline(cin, input);
+        if (input.empty())
+        {
+            continue;
+        }
+
+        if (input == "r")
+        {
+            reset(entityManagers, spawnSystem, seed, filePath, floor);
+            for (auto e : entityManagers[floor].getEntities())
+            {
+                if (e->getComponent<PlayerRaceComponent>())
+                {
+                    player = e;
+                    break;
+                }
+            }
+            displaySystem.update(entityManagers[floor], player, floor, actionMessage);
+            continue;
+        }
+        else if (input == "q")
+        {
+            break;
+        }
+
         try
         {
             // the order matters
-            inputSystem.update(player);
+            inputSystem.update(input, player);
             potionSystem.update(entityManagers[floor], player);
             itemSystem.update(entityManagers[floor], player);
             spawnSystem.update(entityManagers, floor, player);

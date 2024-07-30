@@ -5,27 +5,27 @@
 
 void SpawnSystem::spawnDragonAround(EntityManager &entityManager, int row, int col)
 {
-    for (int i = -1; i <= 1; i++)
-    {
-        for (int j = -1; j <= 1; j++)
+    while (true) {
+        int i = random() % 3 - 1;
+        int j = random() % 3 - 1;
+        std::pair<int, int> dragonPos = std::make_pair(row + i, col + j);
+        if (i == 0 && j == 0)
         {
-            if (i == 0 && j == 0)
-            {
-                continue;
-            }
-            std::pair<int, int> dragonPos = std::make_pair(row + i, col + j);
-
-            if (entityManager.getEntity(dragonPos.first, dragonPos.second))
-            {
-                continue;
-            }
-            if (BOARD[dragonPos.first][dragonPos.second] != '.') // if dragonPos is not a floor tile
-            {
-                continue;
-            }
-            spawnEnemy(entityManager, dragonPos.first, dragonPos.second, "dragon");
-            return;
+            continue;
         }
+
+        if (entityManager.getEntity(dragonPos.first, dragonPos.second))
+        {
+            continue;
+        }
+        if (BOARD[dragonPos.first][dragonPos.second] != '.') // if dragonPos is not a floor tile
+        {
+            continue;
+        }
+        spawnEnemy(entityManager, dragonPos.first, dragonPos.second, "dragon");
+        // get dragon and give it Guarding Position component
+        entityManager.getEntity(dragonPos.first, dragonPos.second)->addComponent(std::make_shared<GuardingPositionComponent>(row, col));
+        return;
     }
 }
 

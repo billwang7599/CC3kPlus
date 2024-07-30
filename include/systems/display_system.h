@@ -11,6 +11,8 @@ class EntityManager;
 
 class DisplaySystem
 {
+    void outputColor(char c);
+
 public:
     void update(EntityManager &);
 };

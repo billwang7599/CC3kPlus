@@ -316,6 +316,7 @@ void SpawnSystem::spawnPlayer(EntityManager &entityManager, int x, int y, const 
 
     player->addComponent(std::make_shared<DisplayComponent>('@'));
     player->addComponent(std::make_shared<PositionComponent>(x, y));
+    player->addComponent(std::make_shared<PotionEffectComponent>(0, 0));
     player->addComponent(std::make_shared<PlayerRaceComponent>(race));
     player->addComponent(std::make_shared<GoldComponent>(0));
     player->addComponent(std::make_shared<MoveableComponent>(true));
@@ -399,7 +400,6 @@ void SpawnSystem::spawnPotion(EntityManager &entityManager, int x, int y, const 
 {
 
     auto potion = entityManager.createEntity();
-    potion->addComponent(std::make_shared<ItemTypeComponent>("potion"));
     potion->addComponent(std::make_shared<PositionComponent>(x, y));
     potion->addComponent(std::make_shared<DisplayComponent>('P'));
     potion->addComponent(std::make_shared<PotionTypeComponent>(potionType));

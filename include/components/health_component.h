@@ -6,8 +6,8 @@
 class HealthComponent : public Component
 {
 public:
-    HealthComponent(const int max) : max_health{max}, current_health{max} {}; // one argument since max_heath == current_health on init
-    const int max_health;
-    int current_health;
+    HealthComponent(const int max) : maxHealth{max}, currentHealth{max} {}; // one argument since max_heath == current_health on init
+    const int maxHealth;
+    int currentHealth;
 };
 #endif // HEALTH_COMPONENT_H

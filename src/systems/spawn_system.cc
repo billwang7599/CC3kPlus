@@ -30,6 +30,49 @@ void SpawnSystem::spawnDragonAround(EntityManager &entityManager, int row, int c
     }
 }
 
+void SpawnSystem::moveToNextFloor(std::vector<EntityManager> &entityManagers, int &floor, std::shared_ptr<Entity> player)
+{
+    // Increase floor and move player attributes to next floor
+    floor++;
+
+    if (floor >= NUM_FLOORS) // Game won
+    {
+        std::cout << "Congratulations! You have won the game!" << std::endl;
+        return;
+    }
+
+    EntityManager &prevEntityManager = entityManagers.at(floor - 1);
+    EntityManager &currEntityManager = entityManagers.at(floor);
+
+    std::shared_ptr<Entity> prevPlayer;
+    std::shared_ptr<Entity> currPlayer;
+
+    for (auto &entity : prevEntityManager.getEntities())
+    {
+        if (entity->getComponent<PlayerRaceComponent>())
+        {
+            prevPlayer = entity;
+            break;
+        }
+    }
+    for (auto &entity : currEntityManager.getEntities())
+    {
+        if (entity->getComponent<PlayerRaceComponent>())
+        {
+            currPlayer = entity;
+            break;
+        }
+    }
+
+    // Move player attributes to next floor
+    currPlayer->getComponent<HealthComponent>()->currentHealth = prevPlayer->getComponent<HealthComponent>()->currentHealth;
+    currPlayer->getComponent<GoldComponent>()->gold = prevPlayer->getComponent<GoldComponent>()->gold;
+    if (prevPlayer->getComponent<BarrierSuitComponent>())
+    {
+        currPlayer->addComponent(std::make_shared<BarrierSuitComponent>());
+    }
+}
+
 void SpawnSystem::readFloors(std::vector<EntityManager> &entityManagers, const std::string &filePath)
 {
     std::ifstream file(filePath);
@@ -466,7 +509,7 @@ void SpawnSystem::spawnItem(EntityManager &entityManager, int x, int y, const st
     }
 }
 
-void SpawnSystem::update(std::vector<EntityManager> &entityManagers, int floor, std::shared_ptr<Entity> player)
+void SpawnSystem::update(std::vector<EntityManager> &entityManagers, int &floor, std::shared_ptr<Entity> player)
 {
     EntityManager &entityManager = entityManagers.at(floor);
 

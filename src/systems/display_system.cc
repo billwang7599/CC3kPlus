@@ -55,9 +55,19 @@ void DisplaySystem::update(EntityManager &entityManager, std::shared_ptr<Entity>
     output += " Gold: " + std::to_string(player->getComponent<GoldComponent>()->gold);
     output += " Floor: " + std::to_string(floor + 1);
 
+    std::string attack_output = std::to_string(player->getComponent<AttackComponent>()->attackPower);
+    std::string defense_output = std::to_string(player->getComponent<DefenseComponent>()->defensePower);
+
+    auto potionEffectComponent = player->getComponent<PotionEffectComponent>();
+    if (potionEffectComponent)
+    {
+        attack_output += " + " + std::to_string(potionEffectComponent->attackChange);
+        defense_output += " + " + std::to_string(potionEffectComponent->defenseChange);
+    }
+
     std::cout << output << std::endl;
     std::cout << "HP: " << player->getComponent<HealthComponent>()->currentHealth << std::endl;
-    std::cout << "Atk: " << player->getComponent<AttackComponent>()->attackPower << std::endl;
-    std::cout << "Def: " << player->getComponent<DefenseComponent>()->defensePower << std::endl;
+    std::cout << "Atk: " << attack_output << std::endl;
+    std::cout << "Def: " << defense_output << std::endl;
     std::cout << "Action: " << action << std::endl;
 }

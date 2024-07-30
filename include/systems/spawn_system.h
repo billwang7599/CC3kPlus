@@ -11,9 +11,11 @@
 #include <iostream>
 
 class EntityManager;
+class Entity;
 class SpawnSystem
 {
     void spawnDragonAround(EntityManager &entityManager, int row, int col);
+    void moveToNextFloor(std::vector<EntityManager> &entityManagers, int &floor, std::shared_ptr<Entity> player);
 
 public:
     void readFloors(std::vector<EntityManager> &entityManagers, const std::string &filePath);
@@ -23,7 +25,7 @@ public:
     void spawnPotion(EntityManager &entityManager, int x, int y, const std::string &potionType);
     void spawnTreasure(EntityManager &entityManager, int x, int y, const int &value);
     void spawnItem(EntityManager &entityManager, int x, int y, const std::string &itemType);
-    void update(std::vector<EntityManager> &entityManagers, int floor, std::shared_ptr<Entity> player);
+    void update(std::vector<EntityManager> &entityManagers, int &floor, std::shared_ptr<Entity> player);
 };
 
 #endif

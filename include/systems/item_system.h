@@ -1,5 +1,5 @@
-#ifndef USE_SYSTEM_H
-#define USE_SYSTEM_H
+#ifndef ITEM_SYSTEM_H
+#define ITEM_SYSTEM_H
 
 #include <memory>
 #include <vector>

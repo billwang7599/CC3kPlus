@@ -57,7 +57,7 @@ void MovementSystem::update(EntityManager& entities, std::shared_ptr<Entity> pla
                 } else {
                     actionMessage.push_back(
                         "PC moves " + player->getComponent<DirectionComponent>()->direction +
-                        " and sees an unkown potion.");
+                        " and sees an unknown potion.");
                 }
             }
         }

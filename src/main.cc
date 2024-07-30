@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 {
     bool gameLoop = true;
     std::string filePath;
-    int seed = 1231312;
+    int seed = 69420;
     std::srand(seed);
 
     if (argc > 1)

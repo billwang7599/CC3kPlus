@@ -11,6 +11,7 @@
 #include "systems/potion_system.h"
 #include "systems/item_system.h"
 #include "constants/constants.h"
+#include "globals/global.h"
 
 
 int main(int argc, char *argv[])
@@ -80,6 +81,7 @@ int main(int argc, char *argv[])
             movementSystem.update(entityManagers[floor], player);
             combatSystem.update(entityManagers[floor], player);
             displaySystem.update(entityManagers[floor], player, floor, actionMessage);
+            actionMessage.clear();
         }
         catch (std::string e)
         {

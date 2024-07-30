@@ -59,5 +59,16 @@ void DisplaySystem::update(EntityManager &entityManager, std::shared_ptr<Entity>
     std::cout << "HP: " << player->getComponent<HealthComponent>()->currentHealth << std::endl;
     std::cout << "Atk: " << player->getComponent<AttackComponent>()->attackPower << std::endl;
     std::cout << "Def: " << player->getComponent<DefenseComponent>()->defensePower << std::endl;
+
+    // process action
+    int pos = action.find_last_of('\n');
+    for (int i = 0; i < action.size(); ++i) {
+        if (action[i] == '\n') {
+            if (i != pos) {
+                action[i] = ' ';
+                action[i + 1] = toupper(action[i + 1]);
+            }
+        }
+    }
     std::cout << "Action: " << action << std::endl;
 }

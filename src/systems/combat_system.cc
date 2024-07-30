@@ -5,6 +5,7 @@
 #include "systems/combat_system.h"
 #include "entities/entity_manager.h"
 #include "constants/constants.h"
+#include "globals/global.h"
 using namespace std;
 
 void CombatSystem::update(EntityManager &entities, shared_ptr<Entity> player)
@@ -30,11 +31,10 @@ void CombatSystem::battle(EntityManager &entities, shared_ptr<Entity> player, co
     }
 
     if (!target) {
-        std::cout << "No target there!" << '\n';
+        actionMessage += "PC attacked " + direction + " but nothing was there...\n";
         return;
     }
 
-    std::cout << "Player is attacking the enemy" << '\n';
     attack(*player, *target);
 
     // check if target died
@@ -50,7 +50,6 @@ void CombatSystem::battle(EntityManager &entities, shared_ptr<Entity> player, co
         target->addComponent(std::make_shared<TreasureComponent>(4));
         target->addComponent(std::make_shared<ItemTypeComponent>("treasure"));
         target->addComponent(std::make_shared<CanPickupComponent>());
-        return; // return early as so to not remove the entity
     }
 
     // if dragon, then make the treasure it's guarding pick uppable
@@ -107,10 +106,9 @@ void CombatSystem::enemies_attack(EntityManager &entities, Entity &player)
             continue;
         }
         if (random() % 2 == 0) {
-            std::cout << "Enemy is attacking the player" << '\n';
             attack(*enemy, player);
         } else {
-            std::cout << "Enemy missed the player!" << '\n';
+            actionMessage += enemy->getComponent<EnemyTypeComponent>()->enemy_type + " missed the player!" + '\n';
         }
     }
 }
@@ -161,7 +159,12 @@ void CombatSystem::attack(Entity &attacker, Entity &defender)
     }
 
     health -= damage;
-    std::cout << damage << " damage done!" << '\n';
+    if (attacker.getComponent<PlayerRaceComponent>()) {
+        actionMessage += "PC deals " + to_string(damage) + " to " +
+        defender.getComponent<EnemyTypeComponent>()->enemy_type + " (" + to_string(health) + " HP).\n";
+    } else {
+        actionMessage += attacker.getComponent<EnemyTypeComponent>()->enemy_type + " deals " + to_string(damage) + " to PC.\n";
+    }
 }
 
 void CombatSystem::goldsteal(Entity &attacker, Entity &target)

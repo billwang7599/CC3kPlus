@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
     DisplaySystem displaySystem;
     InputSystem inputSystem;
 
+    // Setup
     std::vector<EntityManager> entityManagers(NUM_FLOORS);
     if (!filePath.empty())
     {
@@ -46,20 +47,30 @@ int main(int argc, char *argv[])
             // displaySystem.update(entityManager); // prints out floor
         }
     }
+
+    // Game
     shared_ptr<Entity> player;
-    for (auto e : entityManagers[floor].getEntities()) {
-        if (e->getComponent<PlayerRaceComponent>()) {
+    for (auto e : entityManagers[floor].getEntities())
+    {
+        if (e->getComponent<PlayerRaceComponent>())
+        {
             player = e;
             break;
         }
     }
-    while (gameLoop) {
-        try {
+    while (gameLoop)
+    {
+        try
+        {
             inputSystem.update(player);
             combatSystem.update(entityManagers[floor], player);
-        } catch (std::string e) {
+        }
+        catch (std::string e)
+        {
             std::cout << e << '\n';
-        } catch (char const* e) {
+        }
+        catch (char const *e)
+        {
             std::cout << e << '\n';
         }
         displaySystem.update(entityManagers[floor]);

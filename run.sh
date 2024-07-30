@@ -1,3 +1,3 @@
 clear
 make
-bin/cc3k $1
+bin/cc3k.exe $1

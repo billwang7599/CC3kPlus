@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     int floor = 0;
     bool gameLoop = true;
     std::string filePath;
-    int seed = 213131231312313;
+    int seed = 2123;
     std::srand(seed);
 
     if (argc > 1)

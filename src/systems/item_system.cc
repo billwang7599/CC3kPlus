@@ -51,7 +51,7 @@ void ItemSystem::update(EntityManager &entityManager, std::shared_ptr<Entity> pl
     }
 
     std::shared_ptr<ItemTypeComponent> itemTypeComponent = item->getComponent<ItemTypeComponent>();
-    if (!itemTypeComponent)
+    if (!itemTypeComponent || !item->getComponent<CanPickupComponent>())
     {
         return;
     }

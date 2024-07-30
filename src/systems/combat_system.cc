@@ -23,13 +23,17 @@ void CombatSystem::battle(EntityManager &entities, shared_ptr<Entity> player, co
     shared_ptr<Entity> target;
 
     // Get target
-    try {
-        target = entities.getEntity(pRow + directions.at(direction).first, pCol + directions.at(direction).second);
-    } catch (exception e) {
+    try
+    {
+        target = entities.getEntity(pRow + DIRECTION_MAP.at(direction).first, pCol + DIRECTION_MAP.at(direction).second);
+    }
+    catch (exception e)
+    {
         throw "Not a valid direction!";
     }
 
-    if (!target) {
+    if (!target)
+    {
         std::cout << "No target there!" << '\n';
         return;
     }
@@ -38,10 +42,14 @@ void CombatSystem::battle(EntityManager &entities, shared_ptr<Entity> player, co
     attack(*player, *target);
 
     // check if target died
-    if (!checkDeath(*target)) {return; }
+    if (!checkDeath(*target))
+    {
+        return;
+    }
 
     // if merchant, change him to a gold pile
-    if (target->getComponent<EnemyTypeComponent>()->enemy_type == "merchant") {
+    if (target->getComponent<EnemyTypeComponent>()->enemy_type == "merchant")
+    {
         // if he is non hostile, change all merchants to hostile
         merchantHostile = true;
         target->removeComponent<EnemyTypeComponent>();
@@ -54,14 +62,16 @@ void CombatSystem::battle(EntityManager &entities, shared_ptr<Entity> player, co
     }
 
     // if dragon, then make the treasure it's guarding pick uppable
-    if (target->getComponent<EnemyTypeComponent>()->enemy_type == "dragon") {
+    if (target->getComponent<EnemyTypeComponent>()->enemy_type == "dragon")
+    {
         std::shared_ptr<GuardingPositionComponent> pos = target->getComponent<GuardingPositionComponent>();
         std::shared_ptr<Entity> treasure = entities.getEntity(pos->row, pos->col);
         treasure->addComponent(std::make_shared<CanPickupComponent>());
     }
 
     // if enemy holds compass, turn him into the compass
-    if (target->getComponent<CompassComponent>()) {
+    if (target->getComponent<CompassComponent>())
+    {
         target->removeComponent<EnemyTypeComponent>();
         target->removeComponent<DisplayComponent>();
         target->addComponent(std::make_shared<DisplayComponent>('C'));
@@ -72,7 +82,8 @@ void CombatSystem::battle(EntityManager &entities, shared_ptr<Entity> player, co
     if (target->getComponent<GoldComponent>())
     {
         int gold = target->getComponent<GoldComponent>()->gold;
-        if (player->getComponent<GoldMultiplierComponent>()) {
+        if (player->getComponent<GoldMultiplierComponent>())
+        {
             gold *= player->getComponent<GoldMultiplierComponent>()->percent;
         }
         player->getComponent<GoldComponent>()->gold += gold;
@@ -98,18 +109,24 @@ void CombatSystem::enemies_attack(EntityManager &entities, Entity &player)
         }
     }
 
-    for (auto& enemy : enemies) {
-        if (!enemy || !enemy->getComponent<EnemyTypeComponent>()) {
+    for (auto &enemy : enemies)
+    {
+        if (!enemy || !enemy->getComponent<EnemyTypeComponent>())
+        {
             continue;
         }
         // if no merchant has died, continue
-        if (enemy->getComponent<EnemyTypeComponent>()->enemy_type == "merchant" && !merchantHostile) {
+        if (enemy->getComponent<EnemyTypeComponent>()->enemy_type == "merchant" && !merchantHostile)
+        {
             continue;
         }
-        if (random() % 2 == 0) {
+        if (random() % 2 == 0)
+        {
             std::cout << "Enemy is attacking the player" << '\n';
             attack(*enemy, player);
-        } else {
+        }
+        else
+        {
             std::cout << "Enemy missed the player!" << '\n';
         }
     }

@@ -687,13 +687,13 @@ const std::vector<std::vector<std::pair<int, int>>> ROOMS = {
         {21, 75},
     }};
 
-const std::map<std::string, std::pair<int, int>> directions = {
-        {"no", {-1, 0}},  // north
-        {"so", {1, 0}},   // south
-        {"ea", {0, 1}},   // east
-        {"we", {0, -1}},  // west
-        {"ne", {-1, 1}},  // northeast
-        {"nw", {-1, -1}}, // northwest
-        {"se", {1, 1}},   // southeast
-        {"sw", {1, -1}}   // southwest
-    };
+const std::map<std::string, std::pair<int, int>> DIRECTION_MAP = {
+    {"no", {-1, 0}},  // north
+    {"so", {1, 0}},   // south
+    {"ea", {0, 1}},   // east
+    {"we", {0, -1}},  // west
+    {"ne", {-1, 1}},  // northeast
+    {"nw", {-1, -1}}, // northwest
+    {"se", {1, 1}},   // southeast
+    {"sw", {1, -1}}   // southwest
+};

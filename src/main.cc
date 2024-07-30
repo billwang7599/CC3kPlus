@@ -13,7 +13,6 @@
 #include "constants/constants.h"
 #include "globals/global.h"
 
-
 void reset(std::vector<EntityManager> &entityManagers, SpawnSystem &spawnSystem, int &seed, std::string &filePath, int &floor)
 {
     floor = 0;
@@ -190,7 +189,7 @@ int main(int argc, char *argv[])
             {
                 reset(entityManagers, spawnSystem, seed, filePath, floor);
                 player = getPlayer(entityManagers[floor]);
-                displaySystem.update(entityManagers[floor], player, floor, actionMessage);
+                displaySystem.update(entityManagers[floor], player, floor);
             }
             else
             {

@@ -1,6 +1,11 @@
+#ifndef GOLD_MULTIPLIER_COMPONENT_H
+#define GOLD_MULTIPLIER_COMPONENT_H
+
 #include "component.h"
 
-class GoldEffectComponent : public Component {
+class GoldMultiplierComponent : public Component {
+    public:
     float percent;
-    GoldEffectComponent(float percent) : percent{percent} {};
+    GoldMultiplierComponent(float percent) : percent{percent} {};
 };
+#endif // GOLD_MULTIPLIER_COMPONENT_H

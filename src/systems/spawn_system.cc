@@ -300,18 +300,21 @@ void SpawnSystem::spawnPlayer(EntityManager &entityManager, int x, int y, const 
         player->addComponent(std::make_shared<HealthComponent>(100));
         player->addComponent(std::make_shared<AttackComponent>(20));
         player->addComponent(std::make_shared<DefenseComponent>(30));
+        player->addComponent(std::make_shared<GoldMultiplierComponent>(2));
     }
     else if (race == "elf")
     {
         player->addComponent(std::make_shared<HealthComponent>(140));
         player->addComponent(std::make_shared<AttackComponent>(30));
         player->addComponent(std::make_shared<DefenseComponent>(10));
+        player->addComponent(std::make_shared<AllPositiveComponent>());
     }
     else if (race == "orc")
     {
         player->addComponent(std::make_shared<HealthComponent>(180));
         player->addComponent(std::make_shared<AttackComponent>(30));
         player->addComponent(std::make_shared<DefenseComponent>(25));
+        player->addComponent(std::make_shared<GoldMultiplierComponent>(0.5));
     }
 
     player->addComponent(std::make_shared<DisplayComponent>('@'));

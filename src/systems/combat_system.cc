@@ -43,7 +43,11 @@ void CombatSystem::battle(EntityManager &entities, shared_ptr<Entity> player, co
         {
             if (target->getComponent<GoldComponent>())
             {
-                player->getComponent<GoldComponent>()->gold += target->getComponent<GoldComponent>()->gold;
+                int gold = target->getComponent<GoldComponent>()->gold;
+                if (player->getComponent<GoldMultiplierComponent>()) {
+                    gold *= player->getComponent<GoldMultiplierComponent>()->percent;
+                }
+                player->getComponent<GoldComponent>()->gold += gold;
             }
             entities.removeEntity(target);
         };

@@ -1,3 +1,6 @@
+#ifndef COLOURS_H
+#define COLOURS_H
+
 // Regular text
 #define BLK "\e[0;30m"
 #define RED "\e[0;31m"
@@ -70,3 +73,4 @@
 
 // Reset
 #define COLOR_RESET "\e[0m"
+#endif // COLOURS_H

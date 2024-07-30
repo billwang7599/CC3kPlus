@@ -11,6 +11,7 @@ class EntityManager;
 
 class CombatSystem
 {
+    bool merchantHostile = false;
     void lifesteal(Entity &, int);
     void goldsteal(Entity &, Entity &);
     void attack(Entity &, Entity &);

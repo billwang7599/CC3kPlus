@@ -41,6 +41,26 @@ void CombatSystem::battle(EntityManager &entities, shared_ptr<Entity> player, co
         // check if target died
         if (checkDeath(*target))
         {
+            // if merchant, change him to a gold pile
+            if (target->getComponent<EnemyTypeComponent>()->enemy_type == "merchant") {
+                // if he is non hostile, change all merchants to hostile
+                merchantHostile = true;
+                target->removeComponent<EnemyTypeComponent>();
+                target->removeComponent<DisplayComponent>();
+                target->addComponent(std::make_shared<DisplayComponent>('G'));
+                target->addComponent(std::make_shared<TreasureComponent>(4));
+                target->addComponent(std::make_shared<ItemTypeComponent>("treasure"));
+                target->addComponent(std::make_shared<CanPickupComponent>());
+                return; // return early as so to not remove the entity
+            }
+
+            // if dragon, then make the treasure it's guarding pick uppable
+            if (target->getComponent<EnemyTypeComponent>()->enemy_type == "dragon") {
+                std::shared_ptr<GuardingPositionComponent> pos = target->getComponent<GuardingPositionComponent>();
+                std::shared_ptr<Entity> treasure = entities.getEntity(pos->row, pos->col);
+                treasure->addComponent(std::make_shared<CanPickupComponent>());
+            }
+
             if (target->getComponent<GoldComponent>())
             {
                 int gold = target->getComponent<GoldComponent>()->gold;
@@ -74,6 +94,10 @@ void CombatSystem::enemies_attack(EntityManager &entities, Entity &player)
 
     for (auto& enemy : enemies) {
         if (!enemy || !enemy->getComponent<EnemyTypeComponent>()) {
+            continue;
+        }
+        // if no merchant has died, continue
+        if (enemy->getComponent<EnemyTypeComponent>()->enemy_type == "merchant" && !merchantHostile) {
             continue;
         }
         if (random() % 2 == 0) {

@@ -96,7 +96,7 @@ void ItemSystem::update(EntityManager &entityManager, std::shared_ptr<Entity> pl
     }
 
     std::shared_ptr<ItemTypeComponent> itemTypeComponent = item->getComponent<ItemTypeComponent>();
-    if (!itemTypeComponent)
+    if (!itemTypeComponent || !item->getComponent<CanPickupComponent>())
     {
         return;
     }
@@ -112,9 +112,5 @@ void ItemSystem::update(EntityManager &entityManager, std::shared_ptr<Entity> pl
     else if (itemTypeComponent->item_type == "barrier_suit")
     {
         useBarrierSuit(entityManager, player, item);
-    }
-    else if (itemTypeComponent->item_type == "stairs")
-    {
-        // TODO: handle creating a new floor
     }
 }

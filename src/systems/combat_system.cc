@@ -79,14 +79,18 @@ void CombatSystem::battle(EntityManager &entities, shared_ptr<Entity> player, co
 
     if (target->getComponent<GoldComponent>())
     {
-        int gold = target->getComponent<GoldComponent>()->gold;
+        float gold = target->getComponent<GoldComponent>()->gold;
         if (player->getComponent<GoldMultiplierComponent>())
         {
             gold *= player->getComponent<GoldMultiplierComponent>()->percent;
         }
         player->getComponent<GoldComponent>()->gold += gold;
     }
-    entities.removeEntity(target);
+
+    if (target->getComponent<EnemyTypeComponent>())
+    {
+        entities.removeEntity(target);
+    }
 }
 
 void CombatSystem::enemies_attack(EntityManager &entities, Entity &player)
@@ -192,7 +196,7 @@ void CombatSystem::goldsteal(Entity &attacker, Entity &target)
     }
 
     // get either the stolen amount, or what the target has left
-    int amount = min(attacker.getComponent<GoldStealComponent>()->amountStolen, target.getComponent<GoldComponent>()->gold);
+    float amount = min(attacker.getComponent<GoldStealComponent>()->amountStolen, target.getComponent<GoldComponent>()->gold);
     attacker.getComponent<GoldComponent>()->gold += amount;
     target.getComponent<GoldComponent>()->gold -= amount;
 }

@@ -36,7 +36,6 @@ void SpawnSystem::moveToNextFloor(std::vector<EntityManager> &entityManagers, in
 
     if (floor >= NUM_FLOORS) // Game won
     {
-        std::cout << "Congratulations! You have won the game!" << std::endl;
         return;
     }
 
@@ -324,6 +323,7 @@ void SpawnSystem::newFloor(EntityManager &entityManager, const int seed, bool sp
         }
         else if (enemyTypeRoll < 18) // 1/9 chance
         {
+            enemyWithCompassIndex--; // Dont spawn merchant with compass, don't want two drops
             enemyType = "merchant";
         }
 

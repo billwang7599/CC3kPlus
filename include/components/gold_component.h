@@ -3,10 +3,11 @@
 
 #include "component.h"
 
-class GoldComponent : public Component {
-    public:
-    int gold;
-    GoldComponent(int gold) : gold{gold} {};
+class GoldComponent : public Component
+{
+public:
+    float gold;
+    GoldComponent(float gold) : gold{gold} {};
 };
 
 #endif // GOLD_COMPONENT_H

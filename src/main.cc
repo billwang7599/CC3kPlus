@@ -13,7 +13,6 @@
 #include "constants/constants.h"
 #include "globals/global.h"
 
-
 void reset(std::vector<EntityManager> &entityManagers, SpawnSystem &spawnSystem, int &seed, std::string &filePath, int &floor)
 {
     floor = 0;
@@ -23,14 +22,25 @@ void reset(std::vector<EntityManager> &entityManagers, SpawnSystem &spawnSystem,
         entityManager.getEntities().clear();
     }
 
-    std::cout << "What race would you like to play as? (human | dwarf | elf | orc)" << std::endl;
-    std::string race;
-    std::cin >> race;
-    while (race != "human" && race != "dwarf" && race != "elf" && race != "orc")
+    std::cout << "What race would you like to play as? (h | e | d | o)" << std::endl;
+    char race_char;
+    std::cin >> race_char;
+
+    while (race_char != 'h' && race_char != 'e' && race_char != 'd' && race_char != 'o')
     {
         std::cout << "Invalid race. Try again." << std::endl;
-        std::cin >> race;
+        std::cin >> race_char;
     }
+
+    std::string race;
+    if (race_char == 'h')
+        race = "human";
+    else if (race_char == 'e')
+        race = "elf";
+    else if (race_char == 'd')
+        race = "dwarf";
+    else if (race_char == 'o')
+        race = "orc";
 
     if (!filePath.empty())
     {
@@ -141,9 +151,37 @@ int main(int argc, char *argv[])
         }
         actionMessage.clear();
 
+        // Lost the game
         if (player->getComponent<HealthComponent>()->currentHealth <= 0)
         {
             std::cout << "You died!" << std::endl;
+            std::cout << "Would you like to play again? (y/n)" << std::endl;
+            char playAgain;
+            std::cin >> playAgain;
+            if (playAgain == 'y')
+            {
+                reset(entityManagers, spawnSystem, seed, filePath, floor);
+                player = getPlayer(entityManagers[floor]);
+                displaySystem.update(entityManagers[floor], player, floor);
+            }
+            else
+            {
+                gameLoop = false;
+            }
+        }
+
+        // Won the game
+        if (floor == NUM_FLOORS)
+        {
+            std::cout << "Congratulations! You have completed the game!" << std::endl;
+
+            int score = player->getComponent<GoldComponent>()->gold;
+            if (player->getComponent<PlayerRaceComponent>()->race == "human")
+            {
+                score *= 1.5;
+            }
+            std::cout << "Your score is: " << score << std::endl;
+
             std::cout << "Would you like to play again? (y/n)" << std::endl;
             char playAgain;
             std::cin >> playAgain;

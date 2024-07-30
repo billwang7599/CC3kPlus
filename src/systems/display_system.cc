@@ -14,8 +14,10 @@ void DisplaySystem::outputColor(char c)
         std::cout << MAG;
     else if (c == 'G')
         std::cout << BHYEL;
-    else if (c == '@' || c == '\\')
+    else if (c == 'C' || c == 'B')
         std::cout << BHGRN;
+    else if (c == '@' || c == '\\')
+        std::cout << BHWHT;
     else if (c == 'P')
         std::cout << BHCYN;
     else if (c == 'V' || c == 'W' || c == 'N' || c == 'M' || c == 'D' || c == 'X' || c == 'T')
@@ -53,8 +55,14 @@ void DisplaySystem::update(EntityManager &entityManager, std::shared_ptr<Entity>
         std::cout << std::endl;
     }
     std::string output = "";
+
     output += "Race: " + player->getComponent<PlayerRaceComponent>()->race;
-    output += " Gold: " + std::to_string(player->getComponent<GoldComponent>()->gold);
+
+    // Format gold to 1 decimal place
+    std::ostringstream goldStream;
+    goldStream << std::fixed << std::setprecision(1) << player->getComponent<GoldComponent>()->gold;
+    output += " Gold: " + goldStream.str();
+
     output += " Floor: " + std::to_string(floor + 1);
 
     std::string attack_output = std::to_string(player->getComponent<AttackComponent>()->attackPower);

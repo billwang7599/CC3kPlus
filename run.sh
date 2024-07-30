@@ -1,4 +1,4 @@
 clear
 make clean
 make
-bin/cc3k
+bin/cc3k $1

@@ -2,6 +2,7 @@
 #include "constants/constants.h"
 #include "entities/entity_manager.h"
 #include "components/display_component.h"
+#include "components/stairs_component.h"
 
 void DisplaySystem::update(EntityManager &entityManager)
 {
@@ -13,7 +14,16 @@ void DisplaySystem::update(EntityManager &entityManager)
             if (entity)
             {
                 std::shared_ptr<DisplayComponent> displayComponent = entity->getComponent<DisplayComponent>();
-                std::cout << displayComponent->display_char;
+
+                auto stairsComponent = entity->getComponent<StairsComponent>();
+                if (stairsComponent && !stairsComponent->visible)
+                {
+                    std::cout << BOARD.at(row).at(col);
+                }
+                else
+                {
+                    std::cout << displayComponent->display_char;
+                }
             }
             else
             {

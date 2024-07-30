@@ -1,51 +1,46 @@
 #include <iostream>
 #include <memory>
+#include <fstream>
 #include <string>
 #include "entities/entity_manager.h"
 #include "systems/combat_system.h"
 #include "systems/spawn_system.h"
-
-using namespace std;
+#include "systems/display_system.h"
+#include "constants/constants.h"
 
 int main(int argc, char *argv[])
 {
-    // systems
-    SpawnSystem spawn = SpawnSystem{};
-    CombatSystem combat = CombatSystem{};
+    std::string filePath;
+    int seed = 10000;
 
-    // entity test
-    EntityManager entitites = EntityManager{};
-    spawn.spawnEnemy(entitites, 1, 0, "goblin");
-    spawn.spawnEnemy(entitites, 0, 1, "goblin");
-    spawn.spawnEnemy(entitites, 0, 0, "goblin");
-    spawn.spawnEnemy(entitites, 2, 1, "goblin");
-    spawn.spawnPlayer(entitites, 1, 1, "human");
-    shared_ptr<Entity> player = entitites.getEntity(1, 1);
+    if (argc > 1)
+    {
+        filePath = argv[1];
+    }
+    if (argc > 2)
+    {
+        seed = atoi(argv[2]);
+    }
+    std::srand(seed);
 
-    // combat test
-    try {
-        combat.battle(entitites, player, "ea");
-        combat.battle(entitites, player, "ea");
-        combat.battle(entitites, player, "ea");
-        combat.battle(entitites, player, "ea");
-        combat.battle(entitites, player, "ea");
-        combat.battle(entitites, player, "ea");
-        combat.battle(entitites, player, "ea");
-        combat.battle(entitites, player, "ea");
-        combat.battle(entitites, player, "ea");
-        combat.battle(entitites, player, "ea");
-        combat.battle(entitites, player, "ea");
-        combat.battle(entitites, player, "ea");
-        combat.battle(entitites, player, "ea");
-        combat.battle(entitites, player, "ea");
-        combat.battle(entitites, player, "ea");
-        combat.battle(entitites, player, "ea");
-        combat.battle(entitites, player, "ea");
-        combat.battle(entitites, player, "ea");
-        combat.battle(entitites, player, "ea");
-        combat.battle(entitites, player, "ea");
-    } catch (char const* e) {
-        cout << e << '\n';
+    SpawnSystem spawnSystem;
+    CombatSystem combatSystem;
+    DisplaySystem displaySystem;
+
+    std::vector<EntityManager> entityManagers(NUM_FLOORS);
+    if (!filePath.empty())
+    {
+        spawnSystem.readFloors(entityManagers, filePath);
+    }
+    else
+    {
+        int barrier_suit_floor = std::rand() % 5;
+        for (int i = 0; i < NUM_FLOORS; i++)
+        {
+            EntityManager &entityManager = entityManagers.at(i);
+            spawnSystem.newFloor(entityManager, seed * (i + i), i == barrier_suit_floor);
+            displaySystem.update(entityManager);
+        }
     }
 
     return 0;

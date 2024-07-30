@@ -54,8 +54,6 @@ int main(int argc, char *argv[])
         }
     }
 
-    displaySystem.update(entityManagers[floor]);
-
     // Game
     shared_ptr<Entity> player;
     for (auto e : entityManagers[floor].getEntities())
@@ -66,6 +64,10 @@ int main(int argc, char *argv[])
             break;
         }
     }
+
+    std::string actionMessage = "";
+    displaySystem.update(entityManagers[floor], player, floor, actionMessage);
+
     while (gameLoop)
     {
         try
@@ -76,7 +78,7 @@ int main(int argc, char *argv[])
             itemSystem.update(entityManagers[floor], player);
             movementSystem.update(entityManagers[floor], player);
             combatSystem.update(entityManagers[floor], player);
-            displaySystem.update(entityManagers[floor]);
+            displaySystem.update(entityManagers[floor], player, floor, actionMessage);
         }
         catch (std::string e)
         {

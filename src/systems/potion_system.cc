@@ -9,6 +9,8 @@ void PotionSystem::usePotion(EntityManager &entityManager, std::shared_ptr<Entit
 {
     std::string potionType = potion->getComponent<PotionTypeComponent>()->potion_type;
     auto healthComponent = player->getComponent<HealthComponent>();
+    auto attackComponent = player->getComponent<AttackComponent>();
+    auto defenseComponent = player->getComponent<DefenseComponent>();
     auto potionEffectComponent = player->getComponent<PotionEffectComponent>();
     seenPotions.push_back(potionType);
     actionMessage.push_back("PC uses " + potionType + ".");
@@ -51,17 +53,17 @@ void PotionSystem::usePotion(EntityManager &entityManager, std::shared_ptr<Entit
     else if (potionType == "WA")
     {
         potionEffectComponent->attackChange -= 5;
-        if (potionEffectComponent->attackChange < 0)
+        if (potionEffectComponent->attackChange  + attackComponent->attackPower < 0)
         {
-            potionEffectComponent->attackChange = 0;
+            potionEffectComponent->attackChange = attackComponent->attackPower*-1;
         }
     }
     else if (potionType == "WD")
     {
         potionEffectComponent->defenseChange -= 5;
-        if (potionEffectComponent->defenseChange < 0)
+        if (potionEffectComponent->defenseChange  + defenseComponent->defensePower < 0)
         {
-            potionEffectComponent->defenseChange = 0;
+            potionEffectComponent->defenseChange = defenseComponent->defensePower*-1;
         }
     }
     entityManager.removeEntity(potion);

@@ -16,8 +16,6 @@ void InputSystem::update(string &input, shared_ptr<Entity> player)
     stringstream iss(input);
     iss >> command;
 
-    std::cout << "Command: " << input << '\n';
-
     if (command == "u")
     {
         player->getComponent<ActionComponent>()->move = false;

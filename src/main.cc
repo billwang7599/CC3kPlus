@@ -45,6 +45,18 @@ void reset(std::vector<EntityManager> &entityManagers, SpawnSystem &spawnSystem,
     }
 }
 
+std::shared_ptr<Entity> getPlayer(EntityManager &entityManager)
+{
+    for (auto &entity : entityManager.getEntities())
+    {
+        if (entity->getComponent<PlayerRaceComponent>())
+        {
+            return entity;
+        }
+    }
+    return nullptr;
+}
+
 int main(int argc, char *argv[])
 {
     bool gameLoop = true;
@@ -76,15 +88,7 @@ int main(int argc, char *argv[])
     reset(entityManagers, spawnSystem, seed, filePath, floor);
 
     // Game
-    shared_ptr<Entity> player;
-    for (auto e : entityManagers[floor].getEntities())
-    {
-        if (e->getComponent<PlayerRaceComponent>())
-        {
-            player = e;
-            break;
-        }
-    }
+    shared_ptr<Entity> player = getPlayer(entityManagers[floor]);
 
     std::string actionMessage = "";
     displaySystem.update(entityManagers[floor], player, floor, actionMessage);
@@ -101,20 +105,13 @@ int main(int argc, char *argv[])
         if (input == "r")
         {
             reset(entityManagers, spawnSystem, seed, filePath, floor);
-            for (auto e : entityManagers[floor].getEntities())
-            {
-                if (e->getComponent<PlayerRaceComponent>())
-                {
-                    player = e;
-                    break;
-                }
-            }
+            player = getPlayer(entityManagers[floor]);
             displaySystem.update(entityManagers[floor], player, floor, actionMessage);
             continue;
         }
         else if (input == "q")
         {
-            break;
+            gameLoop = false;
         }
 
         try
@@ -139,6 +136,24 @@ int main(int argc, char *argv[])
         catch (exception &e)
         {
             std::cout << "Exception: " << e.what() << '\n';
+        }
+
+        if (player->getComponent<HealthComponent>()->currentHealth <= 0)
+        {
+            std::cout << "You died!" << std::endl;
+            std::cout << "Would you like to play again? (y/n)" << std::endl;
+            char playAgain;
+            std::cin >> playAgain;
+            if (playAgain == 'y')
+            {
+                reset(entityManagers, spawnSystem, seed, filePath, floor);
+                player = getPlayer(entityManagers[floor]);
+                displaySystem.update(entityManagers[floor], player, floor, actionMessage);
+            }
+            else
+            {
+                gameLoop = false;
+            }
         }
     }
 

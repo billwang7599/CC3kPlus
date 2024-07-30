@@ -7,7 +7,7 @@ SRC_DIR = src
 BUILD_DIR = build
 
 # Output executable
-TARGET = bin/cc3k
+TARGET = bin/cc3k.exe
 
 # Flags
 CXXFLAGS = -I$(INCLUDE_DIR) -std=c++14 -Wall

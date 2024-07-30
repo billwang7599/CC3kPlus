@@ -3,6 +3,110 @@
 #include "entities/entity.h"
 #include "constants/constants.h"
 
+void SpawnSystem::readFloors(std::vector<EntityManager> &entityManagers, const std::string &filePath)
+{
+    std::ifstream file(filePath);
+    std::string line;
+
+    for (int floor = 0; floor < NUM_FLOORS; floor++)
+    {
+        EntityManager &entityManager = entityManagers.at(floor);
+
+        for (int row = 0; row < FLOOR_HEIGHT; row++)
+        {
+            std::getline(file, line);
+            for (int col = 0; col < 79; col++)
+            {
+                char tile = line[col];
+                if (tile == '@')
+                {
+                    spawnPlayer(entityManager, row, col, "human");
+                }
+                else if (tile == 'V')
+                {
+                    spawnEnemy(entityManager, row, col, "vampire");
+                }
+                else if (tile == 'W')
+                {
+                    spawnEnemy(entityManager, row, col, "werewolf");
+                }
+                else if (tile == 'N')
+                {
+                    spawnEnemy(entityManager, row, col, "goblin");
+                }
+                else if (tile == 'M')
+                {
+                    spawnEnemy(entityManager, row, col, "merchant");
+                }
+                else if (tile == 'D')
+                {
+                    spawnEnemy(entityManager, row, col, "dragon");
+                }
+                else if (tile == 'X')
+                {
+                    spawnEnemy(entityManager, row, col, "phoenix");
+                }
+                else if (tile == 'T')
+                {
+                    spawnEnemy(entityManager, row, col, "troll");
+                }
+                else if (tile == '0')
+                {
+                    spawnPotion(entityManager, row, col, "RH");
+                }
+                else if (tile == '1')
+                {
+                    spawnPotion(entityManager, row, col, "BA");
+                }
+                else if (tile == '2')
+                {
+                    spawnPotion(entityManager, row, col, "BD");
+                }
+                else if (tile == '3')
+                {
+                    spawnPotion(entityManager, row, col, "PH");
+                }
+                else if (tile == '4')
+                {
+                    spawnPotion(entityManager, row, col, "WA");
+                }
+                else if (tile == '5')
+                {
+                    spawnPotion(entityManager, row, col, "WD");
+                }
+                else if (tile == '6')
+                {
+                    spawnTreasure(entityManager, row, col, 1);
+                }
+                else if (tile == '7')
+                {
+                    spawnTreasure(entityManager, row, col, 2);
+                }
+                else if (tile == '8')
+                {
+                    spawnTreasure(entityManager, row, col, 4);
+                }
+                else if (tile == '9')
+                {
+                    spawnTreasure(entityManager, row, col, 6);
+                }
+                else if (tile == 'B')
+                {
+                    spawnItem(entityManager, row, col, "barrier_suit");
+                }
+                else if (tile == 'C')
+                {
+                    spawnItem(entityManager, row, col, "compass");
+                }
+                else if (tile == '\\')
+                {
+                    spawnItem(entityManager, row, col, "stairs");
+                }
+            }
+        }
+    }
+}
+
 void SpawnSystem::newFloor(EntityManager &entityManager, const int seed = 10000)
 {
     // Seed random number generator
@@ -254,7 +358,7 @@ void SpawnSystem::spawnEnemy(EntityManager &entityManager, int x, int y, const s
     }
     else if (enemyType == "phoenix")
     {
-        enemy->addComponent(std::make_shared<DisplayComponent>('P'));
+        enemy->addComponent(std::make_shared<DisplayComponent>('X'));
         enemy->addComponent(std::make_shared<HealthComponent>(50, 50));
         enemy->addComponent(std::make_shared<AttackComponent>(35));
         enemy->addComponent(std::make_shared<DefenseComponent>(20));
@@ -320,6 +424,4 @@ void SpawnSystem::spawnItem(EntityManager &entityManager, int x, int y, const st
         item->addComponent(std::make_shared<CanPickupComponent>(false));
         item->addComponent(std::make_shared<StairsComponent>(false));
     }
-
-    // Add more item types as needed
 }

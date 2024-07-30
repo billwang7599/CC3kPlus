@@ -14,7 +14,7 @@ class EntityManager;
 class Entity;
 class SpawnSystem
 {
-    std::shared_ptr<Entity> spawnDragonAround(EntityManager &entityManager, int row, int col);
+    std::shared_ptr<Entity> spawnDragonAround(EntityManager &entityManager, int row, int col, bool spawnWithCompass);
     void moveToNextFloor(std::vector<EntityManager> &entityManagers, int &floor, std::shared_ptr<Entity> &player);
 
 public:

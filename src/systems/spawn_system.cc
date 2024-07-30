@@ -3,7 +3,7 @@
 #include "entities/entity.h"
 #include "constants/constants.h"
 
-std::shared_ptr<Entity> SpawnSystem::spawnDragonAround(EntityManager &entityManager, int row, int col)
+std::shared_ptr<Entity> SpawnSystem::spawnDragonAround(EntityManager &entityManager, int row, int col, bool spawnWithCompass)
 {
     while (true)
     {
@@ -23,7 +23,7 @@ std::shared_ptr<Entity> SpawnSystem::spawnDragonAround(EntityManager &entityMana
         {
             continue;
         }
-        std::shared_ptr<Entity> dragon = spawnEnemy(entityManager, dragonPos.first, dragonPos.second, "dragon", false);
+        std::shared_ptr<Entity> dragon = spawnEnemy(entityManager, dragonPos.first, dragonPos.second, "dragon", spawnWithCompass);
         dragon->addComponent(std::make_shared<GuardingPositionComponent>(row, col));
         return dragon;
     }
@@ -238,13 +238,14 @@ void SpawnSystem::newFloor(EntityManager &entityManager, const int seed, bool sp
         potionsToSpawn--;
     }
 
-    int enemiesToSpawn = 20; // if a dragon is spawned, decrement
+    int enemiesToSpawn = 20;                      // if a dragon is spawned, decrement
+    int enemyWithCompassIndex = std::rand() % 20; // Random index of enemy with compass
     if (spawnBarrierSuit)
     {
         int barrierSuitRoom = std::rand() % 5;
         std::pair<int, int> barrierSuitPos = ROOMS[barrierSuitRoom][std::rand() % ROOMS[barrierSuitRoom].size()];
         spawnItem(entityManager, barrierSuitPos.first, barrierSuitPos.second, "barrier_suit");
-        spawnDragonAround(entityManager, barrierSuitPos.first, barrierSuitPos.second);
+        spawnDragonAround(entityManager, barrierSuitPos.first, barrierSuitPos.second, enemyWithCompassIndex == enemiesToSpawn);
         enemiesToSpawn--;
     }
 
@@ -281,14 +282,13 @@ void SpawnSystem::newFloor(EntityManager &entityManager, const int seed, bool sp
         spawnTreasure(entityManager, treasurePos.first, treasurePos.second, treasureValue);
         if (treasureValue == 6) // Spawn dragon
         {
-            spawnDragonAround(entityManager, treasurePos.first, treasurePos.second);
+            spawnDragonAround(entityManager, treasurePos.first, treasurePos.second, enemyWithCompassIndex == enemiesToSpawn);
             enemiesToSpawn--;
         };
         treasureToSpawn--;
     }
 
     // Spawn 20 enemies
-    int enemyWithCompassIndex = std::rand() % 20;
     while (enemiesToSpawn > 0)
     {
         int enemyRoom = std::rand() % 5;

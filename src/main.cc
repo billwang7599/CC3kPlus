@@ -55,7 +55,7 @@ void reset(std::vector<EntityManager> &entityManagers, SpawnSystem &spawnSystem,
         for (int i = 0; i < NUM_FLOORS; i++)
         {
             EntityManager &entityManager = entityManagers.at(i);
-            spawnSystem.newFloor(entityManager, seed * (i + i), i == barrier_suit_floor, race);
+            spawnSystem.newFloor(entityManager, seed * (i + 1), i == barrier_suit_floor, race);
         }
     }
 }
@@ -77,17 +77,19 @@ int main(int argc, char *argv[])
     bool gameLoop = true;
     std::string filePath;
     int seed = 69420;
-    std::srand(seed);
 
-    if (argc > 1)
+    for (int i = 1; i < argc; ++i)
     {
-        filePath = argv[1];
+        if (std::string(argv[i]) == "--file" && i + 1 < argc)
+        {
+            filePath = argv[i + 1];
+        }
+        else if (std::string(argv[i]) == "--seed" && i + 1 < argc)
+        {
+            seed = std::atoi(argv[i + 1]);
+        }
     }
-    if (argc > 2)
-    {
-        seed = atoi(argv[2]);
-        std::srand(seed);
-    }
+    std::srand(seed);
 
     SpawnSystem spawnSystem;
     CombatSystem combatSystem;

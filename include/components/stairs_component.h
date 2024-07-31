@@ -4,8 +4,6 @@
 #include "component.h"
 
 class StairsComponent : public Component
-{
-public:
-};
+{};
 
 #endif // STAIRS_COMPONENT_H
